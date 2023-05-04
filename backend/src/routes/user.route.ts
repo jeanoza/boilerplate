@@ -5,7 +5,8 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/User";
 
 const router = express.Router();
-const userService = new UserService(AppDataSource.getRepository(User));
+const userRepository = AppDataSource.getRepository(User);
+const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 router.get("/", userController.findAll.bind(userController));
