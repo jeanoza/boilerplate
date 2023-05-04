@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: frontend
+    image: frontend
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    command: npm run dev
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - backend
+  backend:
+    container_name: backend
+    image: backend
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: npm run dev
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      #POSTGRES_HOST: "postgres"
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

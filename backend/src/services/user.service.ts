@@ -1,19 +1,19 @@
-const users = [
-  { id: 1, name: "jean" },
-  { id: 2, name: "paul" },
-  { id: 3, name: "simon" },
-  { id: 4, name: "meiling" },
-  { id: 5, name: "kyubong" },
-];
+import { Repository } from "typeorm";
+import { User } from "../entities/User";
+import { AppDataSource } from "../data-source";
 
 export class UserService {
+  private userRepository: Repository<User>;
+  constructor(userRepository: Repository<User>) {
+    this.userRepository = userRepository;
+  }
   async findAll() {
     //try catch
-    return users;
+    return this.userRepository.find();
   }
   async findById(id: number) {
     try {
-      const user = users.find((user) => user.id === id);
+      const user = this.userRepository.findOne({ where: { id } });
       if (!user) throw new Error("Not found user");
       return user;
     } catch (error) {
