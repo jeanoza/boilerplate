@@ -2,18 +2,42 @@ import { Request, Response } from "express";
 import UserController from "./user.controller";
 import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
-import { User } from "../entities/User";
+import { User } from "../entities/user";
 
 describe("UserController", () => {
   let userController: UserController;
   let userService: UserService;
   let req: Request;
   let res: Response<any, Record<string, any>>;
+  const user: User = {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    age: 18,
+    email: "john@gmail.com",
+  };
+  const users: User[] = [
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      age: 18,
+      email: "john@gmail.com",
+    },
+    {
+      id: 2,
+      firstName: "Jean",
+      lastName: "Sartre",
+      age: 19,
+      email: "jean.paul@gmail.com",
+    },
+  ];
 
   beforeEach(() => {
     userService = {
       findAll: jest.fn(),
       findById: jest.fn(),
+      findByEmail: jest.fn(),
     } as unknown as UserService;
     userController = new UserController(userService);
     req = {} as Request;
@@ -23,10 +47,31 @@ describe("UserController", () => {
     } as unknown as Response;
   });
 
+  describe("findAll", () => {
+    it("should return all user if there is at least one user in db", async () => {
+      jest.spyOn(userService, "findAll").mockResolvedValueOnce(users);
+      // res.json = jest.fn<any>().mockReturnValueOnce(res);
+
+      await userController.findAll(req, res);
+
+      expect(userService.findAll).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+  });
+  describe("findAll", () => {
+    it("should return empty array when no user in db", async () => {
+      jest.spyOn(userService, "findAll").mockResolvedValueOnce([]);
+      await userController.findAll(req, res);
+
+      expect(userService.findAll).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+  });
+
   describe("findById", () => {
     it("should return a user", async () => {
       req = { params: { id: 1 } } as unknown as Request;
-      const user: User = { id: 1, firstName: "John", lastName: "Doe", age: 18 };
+
       jest.spyOn(userService, "findById").mockResolvedValueOnce(user);
       // res.json = jest.fn<any>().mockReturnValueOnce(res);
 
@@ -52,28 +97,16 @@ describe("UserController", () => {
     });
   });
 
-  describe("findAll", () => {
-    it("should return all user if there is at least one user in db", async () => {
-      const users: User[] = [
-        { id: 1, firstName: "John", lastName: "Doe", age: 18 },
-        { id: 2, firstName: "Jean", lastName: "Sartre", age: 19 },
-      ];
-      jest.spyOn(userService, "findAll").mockResolvedValueOnce(users);
-      // res.json = jest.fn<any>().mockReturnValueOnce(res);
+  describe("findByEmail", () => {
+    it("should return a user", async () => {
+      req = { params: { email: "john@gmail.com" } } as unknown as Request;
+      jest.spyOn(userService, "findByEmail").mockResolvedValueOnce(user);
 
-      await userController.findAll(req, res);
+      await userController.findByEmail(req, res);
 
-      expect(userService.findAll).toHaveBeenCalled();
+      expect(userService.findByEmail).toHaveBeenCalledWith("john@gmail.com");
       expect(res.status).toHaveBeenCalledWith(200);
-    });
-  });
-  describe("findAll", () => {
-    it("should return empty array when no user in db", async () => {
-      jest.spyOn(userService, "findAll").mockResolvedValueOnce([]);
-      await userController.findAll(req, res);
-
-      expect(userService.findAll).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(user);
     });
   });
 });

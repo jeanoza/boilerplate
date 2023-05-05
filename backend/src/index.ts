@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import userRouter from "./routes/user.route";
-import { User } from "./entities/User";
+import { User } from "./entities/user";
+import "reflect-metadata";
 
 AppDataSource.initialize()
   .then(async () => {
@@ -19,48 +20,30 @@ AppDataSource.initialize()
     // start express server
     app.listen(process.env.SERVER_PORT);
 
-    // insert new users for test
-    await AppDataSource.manager.save(
-      AppDataSource.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27,
-      })
-    );
+    // insert new users for test when no test user
+    const userCount = await AppDataSource.manager.count(User);
+    if (userCount === 0) {
+      await AppDataSource.manager.save(
+        AppDataSource.manager.create(User, {
+          firstName: "Timber",
+          lastName: "Saw",
+          age: 27,
+          email: "timber@gmail.com",
+        })
+      );
 
-    await AppDataSource.manager.save(
-      AppDataSource.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24,
-      })
-    );
+      await AppDataSource.manager.save(
+        AppDataSource.manager.create(User, {
+          firstName: "Phantom",
+          lastName: "Assassin",
+          age: 24,
+          email: "phantom@gmail.com",
+        })
+      );
+    }
 
     console.log(
-      `Express server has started on port ${process.env.SERVER_PORT}. Open http://localhost:3000/users to see results`
+      `Express server has started on port ${process.env.SERVER_PORT}`
     );
   })
   .catch((error) => console.log(error));
-
-// register express routes from defined application routes
-// Routes.forEach((route) => {
-//   (app as any)[route.method](
-//     route.route,
-//     (req: Request, res: Response, next: Function) => {
-//       const result = new (route.controller as any)()[route.action](
-//         req,
-//         res,
-//         next
-//       );
-//       if (result instanceof Promise) {
-//         result.then((result) =>
-//           result !== null && result !== undefined
-//             ? res.send(result)
-//             : undefined
-//         );
-//       } else if (result !== null && result !== undefined) {
-//         res.json(result);
-//       }
-//     }
-//   );
-// });

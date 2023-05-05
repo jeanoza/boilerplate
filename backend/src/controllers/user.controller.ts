@@ -23,4 +23,14 @@ export default class UserController {
       res.status(404).json(error);
     }
   }
+  async findByEmail(req: Request, res: Response) {
+    try {
+      const email = req.params.email;
+      const user = await this.userService.findByEmail(email);
+      res.status(200).json(user);
+    } catch (error) {
+      // console.error(error);
+      res.status(404).json(error);
+    }
+  }
 }
