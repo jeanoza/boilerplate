@@ -9,6 +9,7 @@ export default class UserController {
       const users = await this.userService.findAll();
       res.status(200).json(users);
     } catch (error) {
+      // console.error(error);
       res.status(404).json(error);
     }
   }
@@ -18,7 +19,7 @@ export default class UserController {
       const user = await this.userService.findById(id);
       res.status(200).json(user);
     } catch (error) {
-      console.dir(error);
+      // console.error(error);
       res.status(404).json(error);
     }
   }
