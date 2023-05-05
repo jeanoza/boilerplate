@@ -81,7 +81,7 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(user);
     });
-    it("should return an error if the user is not found", async () => {
+    it("should return an error if no user corresponding to id", async () => {
       req = { params: { id: 1 } } as unknown as Request;
       jest
         .spyOn(userService, "findById")
@@ -107,6 +107,21 @@ describe("UserController", () => {
       expect(userService.findByEmail).toHaveBeenCalledWith("john@gmail.com");
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(user);
+    });
+  });
+
+  describe("findByEmail", () => {
+    it("should return an error if no user corresponding to email", async () => {
+      req = { params: { email: "john@gmail.com" } } as unknown as Request;
+      jest
+        .spyOn(userService, "findByEmail")
+        .mockRejectedValueOnce("User not found");
+
+      await userController.findByEmail(req, res);
+
+      expect(userService.findByEmail).toHaveBeenCalledWith("john@gmail.com");
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith("User not found");
     });
   });
 });
