@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import UserController from "./user.controller";
 import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
-import { User } from "../entities/user";
+import { User } from "../entities/user.entity";
 
 describe("UserController", () => {
   let userController: UserController;

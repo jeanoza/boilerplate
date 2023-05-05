@@ -2,7 +2,7 @@ import express from "express";
 import UserController from "../controllers/user.controller";
 import { UserService } from "../services/user.service";
 import { AppDataSource } from "../data-source";
-import { User } from "../entities/user";
+import { User } from "../entities/user.entity";
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
