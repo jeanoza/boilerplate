@@ -3,18 +3,29 @@ import UserController from "./user.controller";
 import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
 import { User } from "../entities/user.entity";
+import { SaveOptions, RemoveOptions, BaseEntity } from "typeorm";
 
 describe("UserController", () => {
   let userController: UserController;
   let userService: UserService;
   let req: Request;
   let res: Response<any, Record<string, any>>;
+  const baseEntityMockFn = {
+    hasId: jest.fn(),
+    save: jest.fn(),
+    remove: jest.fn(),
+    softRemove: jest.fn(),
+    recover: jest.fn(),
+    reload: jest.fn(),
+  } as any;
+
   const user: User = {
     id: 1,
     firstName: "John",
     lastName: "Doe",
     age: 18,
     email: "john@gmail.com",
+    ...baseEntityMockFn,
   };
   const users: User[] = [
     {
@@ -23,6 +34,7 @@ describe("UserController", () => {
       lastName: "Doe",
       age: 18,
       email: "john@gmail.com",
+      ...baseEntityMockFn,
     },
     {
       id: 2,
@@ -30,6 +42,7 @@ describe("UserController", () => {
       lastName: "Sartre",
       age: 19,
       email: "jean.paul@gmail.com",
+      ...baseEntityMockFn,
     },
   ];
 
@@ -104,7 +117,7 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(user);
     });
-    it("should return an error if no user corresponding to email", async () => {
+    it("should returns an error if no user corresponding to email", async () => {
       req = { params: { email: "john@gmail.com" } } as unknown as Request;
       jest
         .spyOn(userService, "findByEmail")
@@ -116,5 +129,19 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith("User not found");
     });
+  });
+
+  describe("create", () => {
+    it("sholud return a user", async () => {
+      req = { body: { ...user } } as unknown as Request;
+      jest.spyOn(userService, "create").mockResolvedValueOnce(user);
+
+      await userController.create(req, res);
+
+      expect(userService.create).toHaveBeenCalledWith(user);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(user);
+    });
+    it("sholud return an error when fail on validation", async () => {});
   });
 });

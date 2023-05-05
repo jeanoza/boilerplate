@@ -12,6 +12,8 @@ const userController = new UserController(userService);
 router.get("/", userController.findAll.bind(userController));
 router.get("/:id", userController.findById.bind(userController));
 router.get("/email/:email", userController.findByEmail.bind(userController));
+
+router.post("/", userController.create.bind(userController));
 // router.post("/", userController.)
 
 export default router;
