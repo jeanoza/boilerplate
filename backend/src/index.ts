@@ -11,7 +11,7 @@ AppDataSource.initialize()
     app.use(express.json());
 
     //routers
-    app.use(userRouter);
+    app.use("/api/user", userRouter);
 
     // setup express app here
     // ...

@@ -9,7 +9,7 @@ export default class UserController {
       const users = await this.userService.findAll();
       res.status(200).json(users);
     } catch (error) {
-      res.status(404).json({ error: "Internal server error" });
+      res.status(404).json(error);
     }
   }
   async findById(req: Request, res: Response) {
@@ -18,7 +18,8 @@ export default class UserController {
       const user = await this.userService.findById(id);
       res.status(200).json(user);
     } catch (error) {
-      res.status(404).json({ error: "User not found" });
+      console.dir(error);
+      res.status(404).json(error);
     }
   }
 }

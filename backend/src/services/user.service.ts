@@ -9,7 +9,7 @@ export class UserService {
   }
   async findById(id: number) {
     const user = this.userRepository.findOne({ where: { id } });
-    if (!user) throw new Error("Not found user");
+    if (!user) throw new Error("User not found");
     return user;
   }
 }

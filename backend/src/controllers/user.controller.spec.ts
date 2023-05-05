@@ -39,7 +39,7 @@ describe("UserController", () => {
     it("should return an error if the user is not found", async () => {
       jest
         .spyOn(userService, "findById")
-        .mockRejectedValueOnce(new Error("User not found"));
+        .mockRejectedValueOnce("User not found");
       res.status = jest.fn<any>().mockReturnValueOnce(res);
       res.json = jest.fn<any>().mockReturnValueOnce(res);
 
@@ -47,11 +47,11 @@ describe("UserController", () => {
 
       expect(userService.findById).toHaveBeenCalledWith(1);
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
+      expect(res.json).toHaveBeenCalledWith("User not found");
     });
   });
 
-  describe("findAll", () => {
-    it("should return all user ");
-  });
+  // describe("findAll", () => {
+  //   it("should return all user ");
+  // });
 });

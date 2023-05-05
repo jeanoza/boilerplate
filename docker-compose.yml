@@ -47,5 +47,6 @@ services:
       - ${DB_PORT}:${DB_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
+
 volumes:
   pgdata:
