@@ -19,7 +19,13 @@ export class UserService {
     if (!user) throw new Error("User not found");
     return user;
   }
-  async create(user: User) {
-    return;
+  async create(body: User): Promise<User> {
+    const user = new User();
+    user.firstName = body.firstName;
+    user.lastName = body.lastName;
+    user.age = body.age;
+    user.email = body.email;
+    if (!user) throw new Error("Failed create user");
+    return await this.userRepository.save(user);
   }
 }

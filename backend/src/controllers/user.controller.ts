@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { User } from "../entities/user.entity";
+import { QueryFailedError } from "typeorm";
 
 export default class UserController {
   constructor(private userService: UserService) {}
@@ -37,16 +38,12 @@ export default class UserController {
   async create(req: Request, res: Response, next?: NextFunction) {
     try {
       const { body } = req;
-      // const user: User = new User();
-      // user.firstName = body.firstName;
-      // user.lastName = body.lastName;
-      // user.email = body.email;
-      // user.age = body.age;
-      // const result = user.save();
-      // console.log(result);
+      const user = await this.userService.create(body);
+      res.status(200).json(user);
     } catch (error) {
+      // console.error(error.message);
       // console.log(error);
-      res.status(404).json(error);
+      res.status(404).json({ error });
     }
   }
 }

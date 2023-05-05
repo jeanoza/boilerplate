@@ -10,47 +10,27 @@ describe("UserController", () => {
   let userService: UserService;
   let req: Request;
   let res: Response<any, Record<string, any>>;
-  const baseEntityMockFn = {
-    hasId: jest.fn(),
-    save: jest.fn(),
-    remove: jest.fn(),
-    softRemove: jest.fn(),
-    recover: jest.fn(),
-    reload: jest.fn(),
-  } as any;
 
-  const user: User = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    age: 18,
-    email: "john@gmail.com",
-    ...baseEntityMockFn,
-  };
-  const users: User[] = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      age: 18,
-      email: "john@gmail.com",
-      ...baseEntityMockFn,
-    },
-    {
-      id: 2,
-      firstName: "Jean",
-      lastName: "Sartre",
-      age: 19,
-      email: "jean.paul@gmail.com",
-      ...baseEntityMockFn,
-    },
-  ];
+  //mocks entity
+  const user: User = new User();
+  user.firstName = "John";
+  user.lastName = "Doe";
+  user.age = 18;
+  user.email = "john@gmail.com";
+  const user2: User = new User();
+  user2.firstName = "Jean-Paul";
+  user2.lastName = "Sartre";
+  user2.age = 81;
+  user2.email = "jean.paul@gmail.com";
+  const users: User[] = [user, user2];
 
   beforeEach(() => {
+    //mocks service functions
     userService = {
       findAll: jest.fn(),
       findById: jest.fn(),
       findByEmail: jest.fn(),
+      create: jest.fn(),
     } as unknown as UserService;
     userController = new UserController(userService);
     req = {} as Request;
@@ -133,7 +113,8 @@ describe("UserController", () => {
 
   describe("create", () => {
     it("sholud return a user", async () => {
-      req = { body: { ...user } } as unknown as Request;
+      req = { body: user } as unknown as Request;
+
       jest.spyOn(userService, "create").mockResolvedValueOnce(user);
 
       await userController.create(req, res);
@@ -142,6 +123,18 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(user);
     });
-    it("sholud return an error when fail on validation", async () => {});
+    it("sholud return an error when fail on validation", async () => {
+      jest
+        .spyOn(userService, "create")
+        .mockRejectedValueOnce("Contains null attribut");
+
+      await userController.create(req, res);
+
+      // expect(userService.create).toHaveBeenCalledWith(undefined);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Contains null attribut",
+      });
+    });
   });
 });
