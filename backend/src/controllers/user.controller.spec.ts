@@ -3,7 +3,6 @@ import UserController from "./user.controller";
 import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
 import { User } from "../entities/user.entity";
-import { SaveOptions, RemoveOptions, BaseEntity } from "typeorm";
 
 describe("UserController", () => {
   let userController: UserController;
@@ -49,14 +48,23 @@ describe("UserController", () => {
       expect(userService.findAll).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
     });
-  });
-  describe("findAll", () => {
     it("should return empty array when no user in db", async () => {
       jest.spyOn(userService, "findAll").mockResolvedValueOnce([]);
       await userController.findAll(req, res);
 
       expect(userService.findAll).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
+    });
+    it("should return an error when typeorm throw an error", async () => {
+      jest
+        .spyOn(userService, "findAll")
+        .mockRejectedValueOnce(new Error("Server error"));
+
+      await userController.findAll(req, res);
+
+      expect(userService.findAll).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error: "Server error" });
     });
   });
 
@@ -76,13 +84,13 @@ describe("UserController", () => {
       req = { params: { id: 1 } } as unknown as Request;
       jest
         .spyOn(userService, "findById")
-        .mockRejectedValueOnce("User not found");
+        .mockRejectedValueOnce(new Error("User not found"));
 
       await userController.findById(req, res);
 
       expect(userService.findById).toHaveBeenCalledWith(1);
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith("User not found");
+      expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
     });
   });
 
@@ -101,13 +109,13 @@ describe("UserController", () => {
       req = { params: { email: "john@gmail.com" } } as unknown as Request;
       jest
         .spyOn(userService, "findByEmail")
-        .mockRejectedValueOnce("User not found");
+        .mockRejectedValueOnce(new Error("User not found"));
 
       await userController.findByEmail(req, res);
 
       expect(userService.findByEmail).toHaveBeenCalledWith("john@gmail.com");
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith("User not found");
+      expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
     });
   });
 
@@ -126,11 +134,11 @@ describe("UserController", () => {
     it("sholud return an error when fail on validation", async () => {
       jest
         .spyOn(userService, "create")
-        .mockRejectedValueOnce("Contains null attribut");
+        .mockRejectedValueOnce(new Error("Contains null attribut"));
 
       await userController.create(req, res);
 
-      // expect(userService.create).toHaveBeenCalledWith(undefined);
+      expect(userService.create).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: "Contains null attribut",
