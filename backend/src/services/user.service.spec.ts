@@ -1,26 +1,28 @@
-import { Repository } from "typeorm";
+import { Repository, getRepository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
 
 describe("UserService", () => {
   let userRepository: Repository<User>;
   let userService: UserService;
-
   const mockUser1: User = new User();
-  mockUser1.id = 1;
-  mockUser1.firstName = "John";
-  mockUser1.lastName = "Doe";
-  mockUser1.age = 18;
-  mockUser1.email = "johndoe@example.com";
   const mockUser2: User = new User();
-  mockUser1.id = 2;
-  mockUser2.firstName = "Jean-Paul";
-  mockUser2.lastName = "Sartre";
-  mockUser2.age = 81;
-  mockUser2.email = "jean.paul@gmail.com";
-  const mockUserList: User[] = [mockUser1, mockUser2];
+  const mockUserList: User[] = [];
+  mockUserList.push(mockUser1, mockUser2);
 
   beforeEach(() => {
+    mockUser1.id = 1;
+    mockUser1.firstName = "John";
+    mockUser1.lastName = "Doe";
+    mockUser1.age = 18;
+    mockUser1.email = "johndoe@example.com";
+
+    mockUser2.id = 2;
+    mockUser2.firstName = "Jean-Paul";
+    mockUser2.lastName = "Sartre";
+    mockUser2.age = 81;
+    mockUser2.email = "jean.paul@gmail.com";
+
     userRepository = {
       find: jest.fn(),
       findOne: jest.fn(),
@@ -30,37 +32,22 @@ describe("UserService", () => {
     userService = new UserService(userRepository);
   });
 
-  describe("create", () => {
-    it("should create and return a new user", async () => {
-      const body = {
-        firstName: mockUser1.firstName,
-        lastName: mockUser1.lastName,
-        age: mockUser1.age,
-        email: mockUser1.email,
-      };
+  describe("findAll", () => {
+    it("sholud returns user list", async () => {
+      jest.spyOn(userRepository, "find").mockResolvedValueOnce(mockUserList);
 
-      jest.spyOn(userRepository, "save").mockResolvedValueOnce(mockUser1);
+      const result = await userService.findAll();
 
-      const result = await userService.create(body as User);
-      expect(result).toStrictEqual(mockUser1);
-      expect(userRepository.save).toHaveBeenCalledWith(body);
+      expect(result).toStrictEqual(mockUserList);
+      expect(userRepository.find).toHaveBeenCalledWith();
     });
+    it("sholud returns an empty array when no user in repository", async () => {
+      jest.spyOn(userRepository, "find").mockResolvedValueOnce([]);
 
-    it("should throw an error if failed to create user", async () => {
-      const body = {
-        firstName: mockUser1.firstName,
-        lastName: mockUser1.lastName,
-        age: mockUser1.age,
-        email: mockUser1.email,
-      };
+      const result = await userService.findAll();
 
-      jest
-        .spyOn(userRepository, "save")
-        .mockRejectedValueOnce(new Error("Failed to create user"));
-
-      await expect(userService.create(body as User)).rejects.toThrow(
-        "Failed to create user"
-      );
+      expect(result).toStrictEqual([]);
+      expect(userRepository.find).toHaveBeenCalledWith();
     });
   });
 
@@ -98,22 +85,61 @@ describe("UserService", () => {
     });
   });
 
-  describe("findAll", () => {
-    it("sholud returns user list", async () => {
-      jest.spyOn(userRepository, "find").mockResolvedValueOnce(mockUserList);
+  describe("create", () => {
+    it("should create and return a new user", async () => {
+      const body = {
+        firstName: mockUser1.firstName,
+        lastName: mockUser1.lastName,
+        age: mockUser1.age,
+        email: mockUser1.email,
+      };
 
-      const result = await userService.findAll();
+      console.log("create", mockUserList);
 
-      expect(result).toStrictEqual(mockUserList);
-      expect(userRepository.find).toHaveBeenCalledWith();
+      jest.spyOn(userRepository, "save").mockResolvedValueOnce(mockUser1);
+
+      const result = await userService.create(body as User);
+      expect(result).toStrictEqual(mockUser1);
+      expect(userRepository.save).toHaveBeenCalledWith(body);
     });
-    it("sholud returns an empty array when no user in repository", async () => {
-      jest.spyOn(userRepository, "find").mockResolvedValueOnce([]);
 
-      const result = await userService.findAll();
+    it("should throw an error if failed to create user", async () => {
+      const body = {
+        firstName: mockUser1.firstName,
+        lastName: mockUser1.lastName,
+        age: mockUser1.age,
+        email: mockUser1.email,
+      };
 
-      expect(result).toStrictEqual([]);
-      expect(userRepository.find).toHaveBeenCalledWith();
+      jest
+        .spyOn(userRepository, "save")
+        .mockRejectedValueOnce(new Error("Failed to create user"));
+
+      await expect(userService.create(body as User)).rejects.toThrow(
+        "Failed to create user"
+      );
+    });
+  });
+
+  describe("update", () => {
+    it("sholud update user", async () => {
+      const body = {
+        firstName: "kyubong",
+        lastName: "choi",
+      };
+      const updatedUser = mockUser1;
+      const id = mockUser1.id;
+      updatedUser.firstName = body.firstName;
+      updatedUser.lastName = body.lastName;
+
+      jest.spyOn(userRepository, "findOne").mockResolvedValue(mockUser1);
+      jest.spyOn(userRepository, "save").mockResolvedValue(updatedUser);
+
+      const result = await userService.update(body as User, id);
+
+      expect(result).toStrictEqual(updatedUser);
+      expect(userRepository.findOne).toHaveBeenCalledWith({ where: { id } });
+      expect(userRepository.save).toHaveBeenCalledWith(updatedUser);
     });
   });
 });
