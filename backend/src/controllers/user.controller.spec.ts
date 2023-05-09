@@ -163,5 +163,36 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({ success: true });
     });
+    it("sholud send 404 when no db with current id", async () => {
+      const id = 1;
+      req = { params: { id } } as unknown as Request;
+
+      jest
+        .spyOn(userService, "delete")
+        .mockResolvedValueOnce({ affected: 0 } as DeleteResult);
+
+      await userController.delete(req, res);
+
+      expect(userService.delete).toHaveBeenCalledWith(id);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
+    });
+
+    it("sholud send 500 when get error by typeorm", async () => {
+      const id = 1;
+      req = { params: { id } } as unknown as Request;
+
+      jest
+        .spyOn(userService, "delete")
+        .mockRejectedValueOnce(new Error("Internal server error"));
+
+      await userController.delete(req, res);
+
+      expect(userService.delete).toHaveBeenCalledWith(id);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Internal server error",
+      });
+    });
   });
 });
