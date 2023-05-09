@@ -43,6 +43,19 @@ export default class UserController {
       res.status(404).json({ error: error.message });
     }
   }
+
+  async update(req: Request, res: Response, next?: NextFunction) {
+    try {
+      const {
+        body,
+        params: { id },
+      } = req;
+      const user = await this.userService.update(body, Number(id));
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
   async delete(req: Request, res: Response, next?: NextFunction) {
     try {
       const {

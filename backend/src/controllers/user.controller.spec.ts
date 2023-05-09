@@ -31,6 +31,7 @@ describe("UserController", () => {
       findById: jest.fn(),
       findByEmail: jest.fn(),
       create: jest.fn(),
+      update: jest.fn(),
       delete: jest.fn(),
     } as unknown as UserService;
     userController = new UserController(userService);
@@ -148,8 +149,38 @@ describe("UserController", () => {
     });
   });
 
+  describe("update", () => {
+    it("sholud return a user with status 200", async () => {
+      const id = 1;
+      req = { body: user, params: { id } } as unknown as Request;
+
+      jest.spyOn(userService, "update").mockResolvedValueOnce(user);
+
+      await userController.update(req, res);
+
+      expect(userService.update).toHaveBeenCalledWith(user, id);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(user);
+    });
+
+    it("sholud send 500 when get error by typeorm", async () => {
+      const id = 1;
+      req = { body: user, params: { id } } as unknown as Request;
+
+      jest
+        .spyOn(userService, "update")
+        .mockRejectedValueOnce(new Error("Internal server error"));
+
+      await userController.update(req, res);
+
+      expect(userService.update).toHaveBeenCalledWith(user, id);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error: "Internal server error" });
+    });
+  });
+
   describe("delete", () => {
-    it("sholud delete a user", async () => {
+    it("sholud delete a user then send status 200", async () => {
       const id = 1;
       req = { params: { id } } as unknown as Request;
 

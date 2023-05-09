@@ -9,11 +9,15 @@ const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
+//create
+router.post("/", userController.create.bind(userController));
+//read
 router.get("/", userController.findAll.bind(userController));
 router.get("/:id", userController.findById.bind(userController));
 router.get("/email/:email", userController.findByEmail.bind(userController));
-
-router.post("/", userController.create.bind(userController));
-// router.post("/", userController.)
+//update
+router.patch("/:id", userController.update.bind(userController));
+//delete
+router.delete("/:id", userController.delete.bind(userController));
 
 export default router;
