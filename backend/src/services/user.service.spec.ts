@@ -1,4 +1,4 @@
-import { Repository, getRepository } from "typeorm";
+import { DeleteResult, Repository, getRepository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
 
@@ -7,8 +7,7 @@ describe("UserService", () => {
   let userService: UserService;
   const mockUser1: User = new User();
   const mockUser2: User = new User();
-  const mockUserList: User[] = [];
-  mockUserList.push(mockUser1, mockUser2);
+  const mockUserList: User[] = [mockUser1, mockUser2];
 
   beforeEach(() => {
     mockUser1.id = 1;
@@ -27,6 +26,7 @@ describe("UserService", () => {
       find: jest.fn(),
       findOne: jest.fn(),
       save: jest.fn(),
+      delete: jest.fn(),
     } as unknown as Repository<User>;
 
     userService = new UserService(userRepository);
@@ -94,8 +94,6 @@ describe("UserService", () => {
         email: mockUser1.email,
       };
 
-      console.log("create", mockUserList);
-
       jest.spyOn(userRepository, "save").mockResolvedValueOnce(mockUser1);
 
       const result = await userService.create(body as User);
@@ -140,6 +138,20 @@ describe("UserService", () => {
       expect(result).toStrictEqual(updatedUser);
       expect(userRepository.findOne).toHaveBeenCalledWith({ where: { id } });
       expect(userRepository.save).toHaveBeenCalledWith(updatedUser);
+    });
+  });
+
+  describe("delete", () => {
+    it("should delete user", async () => {
+      jest
+        .spyOn(userRepository, "delete")
+        .mockResolvedValue({ affected: 1 } as DeleteResult);
+
+      const id = 2;
+      const result: DeleteResult = await userService.delete(id);
+
+      expect(result.affected).toStrictEqual(1);
+      expect(userRepository.delete).toHaveBeenCalledWith(id);
     });
   });
 });

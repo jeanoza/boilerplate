@@ -3,6 +3,7 @@ import UserController from "./user.controller";
 import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
 import { User } from "../entities/user.entity";
+import { DeleteResult } from "typeorm";
 
 describe("UserController", () => {
   let userController: UserController;
@@ -30,6 +31,7 @@ describe("UserController", () => {
       findById: jest.fn(),
       findByEmail: jest.fn(),
       create: jest.fn(),
+      delete: jest.fn(),
     } as unknown as UserService;
     userController = new UserController(userService);
     req = {} as Request;
@@ -143,6 +145,23 @@ describe("UserController", () => {
       expect(res.json).toHaveBeenCalledWith({
         error: "Contains null attribut",
       });
+    });
+  });
+
+  describe("delete", () => {
+    it("sholud delete a user", async () => {
+      const id = 1;
+      req = { params: { id } } as unknown as Request;
+
+      jest
+        .spyOn(userService, "delete")
+        .mockResolvedValueOnce({ affected: 1 } as DeleteResult);
+
+      await userController.delete(req, res);
+
+      expect(userService.delete).toHaveBeenCalledWith(id);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ success: true });
     });
   });
 });

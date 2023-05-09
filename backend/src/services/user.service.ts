@@ -1,18 +1,18 @@
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 
 export class UserService {
   constructor(private readonly userRepository: Repository<User>) {}
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
-  async findById(id: number) {
+  async findById(id: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new Error("User not found");
     return user;
   }
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) throw new Error("User not found");
     return user;
@@ -24,5 +24,8 @@ export class UserService {
   async update(body: User, id: number): Promise<User> {
     const user = await this.findById(id);
     return await this.userRepository.save({ ...user, ...body });
+  }
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.userRepository.delete(id);
   }
 }

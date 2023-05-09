@@ -43,4 +43,15 @@ export default class UserController {
       res.status(404).json({ error: error.message });
     }
   }
+  async delete(req: Request, res: Response, next?: NextFunction) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      await this.userService.delete(Number(id));
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  }
 }
