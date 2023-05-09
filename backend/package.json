@@ -39,6 +39,13 @@
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/build/",
+      "/src/routes/",
+      "data-source.ts",
+      "index.ts"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
