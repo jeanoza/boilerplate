@@ -6,8 +6,10 @@ This repository is a boilerplate to use in future
 
 - Frontend: React(TypeScript), Tailwinds
 
-- Backend: Node/Express(TypeScript)
+- Backend: Node/Express(TypeScript), typeorm
 
 - Database: PostgreSQL
 
 - Devops: Docker
+
+- Method: TDD
