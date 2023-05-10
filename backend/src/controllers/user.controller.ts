@@ -9,7 +9,6 @@ export default class UserController {
       const users = await this.userService.findAll();
       res.status(200).json(users);
     } catch (error) {
-      // console.error(error);
       res.status(500).json({ error: "Server error" });
     }
   }
@@ -19,7 +18,6 @@ export default class UserController {
       const user = await this.userService.findById(id);
       res.status(200).json(user);
     } catch (error) {
-      // console.error(error);
       res.status(404).json({ error: error.message });
     }
   }
@@ -29,7 +27,6 @@ export default class UserController {
       const user = await this.userService.findByEmail(email);
       res.status(200).json(user);
     } catch (error) {
-      // console.error(error);
       res.status(404).json({ error: error.message });
     }
   }
@@ -39,7 +36,6 @@ export default class UserController {
       const user = await this.userService.create(body);
       res.status(200).json(user);
     } catch (error) {
-      // console.log(error);
       res.status(404).json({ error: error.message });
     }
   }

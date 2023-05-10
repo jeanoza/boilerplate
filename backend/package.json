@@ -38,7 +38,7 @@
       "ts"
     ],
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".*\\.test\\.ts$",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/build/",
