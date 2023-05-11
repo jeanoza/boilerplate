@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Home from './home';
 
 describe('<Home />', () => {
-  it('render', () => {
+  it('render without error', () => {
     render(<Home />, { wrapper: BrowserRouter });
     const homeElement = screen.getByTestId("home");
     expect(homeElement).toBeInTheDocument();
