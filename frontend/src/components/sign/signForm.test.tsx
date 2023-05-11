@@ -22,7 +22,10 @@ describe('<SignForm/>', () => {
 			expect(signForm).toBeInTheDocument();
 			expect(pathname).toBe('/sign-up')
 		})
-		// it('has 3 field',)
+		it('has 3 field for sign-up', () => {
+			const signUpFields = screen.getAllByTestId('signUpField');
+			expect(signUpFields.length).toBe(3);
+		})
 	})
 	describe("/sign-in router", () => {
 		beforeEach(() => {
@@ -35,6 +38,10 @@ describe('<SignForm/>', () => {
 			const { pathname } = useLocation();
 			expect(signForm).toBeInTheDocument();
 			expect(pathname).toBe('/sign-in')
+		})
+		it('has 2 common fields(email, password)', () => {
+			const commonFields = screen.getAllByTestId('commonField');
+			expect(commonFields.length).toBe(2);
 		})
 	});
 
