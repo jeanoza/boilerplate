@@ -4,7 +4,9 @@ import Footer from "./footer"
 export default function AuthLayout(props: React.PropsWithChildren) {
 	return <>
 		<Navbar />
-		{props.children}
-		<Footer />
+		<div className="h-screen mt-16 relative">
+			{props.children}
+			<Footer />
+		</div>
 	</>
 }
