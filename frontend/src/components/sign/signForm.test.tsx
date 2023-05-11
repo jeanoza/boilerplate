@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-render-in-setup */
 import { render, screen } from "@testing-library/react";
 import SignForm from "./signForm";
 import { BrowserRouter, Location } from "react-router-dom";
@@ -9,24 +10,32 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('<SignForm/>', () => {
-	it('render with /sign-up path', () => {
-		//mock router
-		(useLocation as jest.Mock).mockReturnValue({ pathname: '/sign-up' } as Location);
-
-		render(<SignForm />, { wrapper: BrowserRouter })
-		const signForm = screen.getByTestId('signForm');
-		const { pathname } = useLocation();
-		expect(signForm).toBeInTheDocument();
-		expect(pathname).toBe('/sign-up')
+	describe("/sign-up router", () => {
+		beforeEach(() => {
+			//mock useLocation
+			(useLocation as jest.Mock).mockReturnValue({ pathname: '/sign-up' } as Location);
+			render(<SignForm />, { wrapper: BrowserRouter })
+		})
+		it('render without error', () => {
+			const signForm = screen.getByTestId('signForm');
+			const { pathname } = useLocation();
+			expect(signForm).toBeInTheDocument();
+			expect(pathname).toBe('/sign-up')
+		})
+		// it('has 3 field',)
 	})
-	it('render with /sign-in path', () => {
-		//mock router
-		(useLocation as jest.Mock).mockReturnValue({ pathname: '/sign-in' } as Location);
+	describe("/sign-in router", () => {
+		beforeEach(() => {
+			//mock useLocation
+			(useLocation as jest.Mock).mockReturnValue({ pathname: '/sign-in' } as Location);
+			render(<SignForm />, { wrapper: BrowserRouter })
+		})
+		it('render without error', () => {
+			const signForm = screen.getByTestId('signForm');
+			const { pathname } = useLocation();
+			expect(signForm).toBeInTheDocument();
+			expect(pathname).toBe('/sign-in')
+		})
+	});
 
-		render(<SignForm />, { wrapper: BrowserRouter })
-		const signForm = screen.getByTestId('signForm');
-		const { pathname } = useLocation();
-		expect(signForm).toBeInTheDocument();
-		expect(pathname).toBe('/sign-in')
-	})
 });
