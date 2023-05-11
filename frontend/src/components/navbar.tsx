@@ -28,8 +28,9 @@ export default function Navbar() {
 				{NAV_ELEMENTS.map((el, index) => <li key={el.name} className="capitalize"><Link to={el.path}>{el.name}</Link></li>)}
 			</ul>
 		</div>
-		<div className="navbar-end">
-			{/* <Link className="btn">Get started</Link> */}
+		<div className="navbar-end flex gap-1">
+			<Link to="/sign-in" className="btn bg-transparent text-base-content border-transparent hover:border-transparent hover:text-base-300 capitalize">Sign in</Link>
+			<Link to="/sign-up" className="btn btn-outline btn-primary capitalize">Sign up</Link>
 		</div>
 	</div>
 }
