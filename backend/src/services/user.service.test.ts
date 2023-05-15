@@ -11,12 +11,14 @@ describe("UserService", () => {
 
   beforeEach(() => {
     mockUser1.id = 1;
+    mockUser1.nickName = "JohnD";
     mockUser1.firstName = "John";
     mockUser1.lastName = "Doe";
     mockUser1.age = 18;
     mockUser1.email = "johndoe@example.com";
 
     mockUser2.id = 2;
+    mockUser2.nickName = "JPS";
     mockUser2.firstName = "Jean-Paul";
     mockUser2.lastName = "Sartre";
     mockUser2.age = 81;
@@ -87,12 +89,7 @@ describe("UserService", () => {
 
   describe("create", () => {
     it("should create and return a new user", async () => {
-      const body = {
-        firstName: mockUser1.firstName,
-        lastName: mockUser1.lastName,
-        age: mockUser1.age,
-        email: mockUser1.email,
-      };
+      const body = { ...mockUser1 };
 
       jest.spyOn(userRepository, "save").mockResolvedValueOnce(mockUser1);
 
@@ -102,12 +99,7 @@ describe("UserService", () => {
     });
 
     it("should throw an error if failed to create user", async () => {
-      const body = {
-        firstName: mockUser1.firstName,
-        lastName: mockUser1.lastName,
-        age: mockUser1.age,
-        email: mockUser1.email,
-      };
+      const body = { ...mockUser1 };
 
       jest
         .spyOn(userRepository, "save")

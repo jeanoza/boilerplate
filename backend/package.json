@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest --verbose --coverage",
+    "test": "npx jest --coverage --watchAll=true",
     "dev": "npx nodemon",
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs"
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.1",
     "@types/node": "^16.11.10",
@@ -25,6 +26,7 @@
   "dependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
     "pg": "^8.4.0",

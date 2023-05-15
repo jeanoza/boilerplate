@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import InputField from "../inputField";
-import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 
 function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
@@ -17,8 +16,15 @@ function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
 	</>
 }
 
-function onSubmit(data: any) {
+async function onSubmit(data: any) {
 	console.log(data);
+	fetch("http://localhost:8888/api/user", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data)
+	})
 }
 
 export default function SignForm() {

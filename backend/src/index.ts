@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import cors from "cors";
 import { AppDataSource } from "./data-source";
 import userRouter from "./routes/user.route";
 import { User } from "./entities/user.entity";
@@ -10,12 +11,10 @@ AppDataSource.initialize()
     const app = express();
 
     app.use(express.json());
+    app.use(cors());
 
     //routers
     app.use("/api/user", userRouter);
-
-    // setup express app here
-    // ...
 
     // start express server
     app.listen(process.env.SERVER_PORT);
@@ -25,6 +24,7 @@ AppDataSource.initialize()
     if (userCount === 0) {
       await AppDataSource.manager.save(
         AppDataSource.manager.create(User, {
+          nickName: "Castor",
           firstName: "Timber",
           lastName: "Saw",
           age: 27,
@@ -34,6 +34,7 @@ AppDataSource.initialize()
 
       await AppDataSource.manager.save(
         AppDataSource.manager.create(User, {
+          nickName: "Phan",
           firstName: "Phantom",
           lastName: "Assassin",
           age: 24,
