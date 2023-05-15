@@ -1,15 +1,16 @@
 interface Props {
-	type: string,
-	name: string,
-	placeholder: string,
-	testid?: string
+	type: string;
+	name: string;
+	placeholder: string;
+	register: any;
+	testid?: string;
 }
 
-export default function InputField({ type, name, placeholder, testid }: Props) {
-	return <div className="inputField m-2" data-testid={testid}>
+export default function InputField({ register, type, name, placeholder, testid }: Props) {
+	return <div className="inputField m-2" >
 		<label className="input-group w-80">
 			<span className="w-32">{name}</span>
-			<input type={type} placeholder={placeholder} className="input input-bordered" />
+			<input {...register(name)} type={type} placeholder={placeholder} className="input input-bordered" data-testid={testid} />
 		</label>
 	</div>
 }

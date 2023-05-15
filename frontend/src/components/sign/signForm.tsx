@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import InputField from "../inputField";
+import { FormEvent } from "react";
+import { useForm } from "react-hook-form";
 
 function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
 	return <>
@@ -15,19 +17,24 @@ function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
 	</>
 }
 
+function onSubmit(data: any) {
+	console.log(data);
+}
+
 export default function SignForm() {
 	const { pathname } = useLocation();
+	const { register, handleSubmit } = useForm();
 	const isSignUp = pathname === "/sign-up" ? true : false;
-	return <form className="form-control items-center justify-center" data-testid="signForm">
+	return <form aria-label="signForm" className="form-control items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
 		{isSignUp &&
 			<>
-				<InputField type="text" name="Nick name" placeholder="Name to use in this site" testid="signUpField" />
-				<InputField type="text" name="First name" placeholder="Your given name" testid="signUpField" />
-				<InputField type="text" name="Last name" placeholder="Your family name" testid="signUpField" />
+				<InputField register={register} type="text" name="Nick name" placeholder="Name to use in this site" testid="signUpField" />
+				<InputField register={register} type="text" name="First name" placeholder="Your given name" testid="signUpField" />
+				<InputField register={register} type="text" name="Last name" placeholder="Your family name" testid="signUpField" />
 			</>
 		}
-		<InputField type="text" name="Email" placeholder="jean@example.com" testid="commonField" />
-		<InputField type="password" name="Password" placeholder="1q2w3e4r5t6y!" testid="commonField" />
+		<InputField register={register} type="text" name="Email" placeholder="jean@example.com" testid="commonField" />
+		<InputField register={register} type="password" name="Password" placeholder="1q2w3e4r5t6y!" testid="commonField" />
 		<SignBtnCont isSignUp={isSignUp} />
 	</form>
 }
