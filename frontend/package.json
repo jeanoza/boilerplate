@@ -10,6 +10,7 @@
     "@types/node": "^16.18.25",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
+    "axios": "^1.4.0",
     "daisyui": "^2.51.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,7 +23,7 @@
   "scripts": {
     "dev": "PORT=3333 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -55,6 +56,9 @@
     "collectCoverageFrom": [
       "src/**/*.tsx",
       "src/**/*.ts"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)"
     ]
   }
 }

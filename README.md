@@ -4,7 +4,7 @@ This repository is a boilerplate to use in future
 
 ## Stacks
 
-- Frontend: React(TypeScript), Tailwinds
+- Frontend: React(TypeScript), Tailwind
 
 - Backend: Node/Express(TypeScript), TypeORM
 
