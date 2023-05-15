@@ -43,8 +43,12 @@
     ]
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.0.1",
     "@types/react-router-dom": "^5.3.3",
     "tailwindcss": "^3.3.2"
+  },
+  "overrides": {
+    "@svgr/webpack": "$@svgr/webpack"
   },
   "jest": {
     "collectCoverageFrom": [
