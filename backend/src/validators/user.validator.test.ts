@@ -7,6 +7,10 @@ describe("validateCreateUser", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
+  let errorSpy: jest.SpyInstance;
+
+  const mockValidate = jest.spyOn(validator, "validate");
+
   beforeEach(() => {
     req = {
       body: {
@@ -22,10 +26,18 @@ describe("validateCreateUser", () => {
       json: jest.fn(),
     };
     next = jest.fn();
+    errorSpy = jest.spyOn(console, "error");
+    errorSpy.mockImplementation(() => {});
   });
+
+  afterEach(() => {
+    errorSpy.mockRestore();
+  });
+
   it("should validate and modify the request body", async () => {
     // Mock the class-validator's validate function
-    jest.spyOn(validator, "validate").mockResolvedValue([]);
+
+    mockValidate.mockResolvedValue([]);
 
     await validateCreateUser(req as Request, res as Response, next);
 
@@ -41,12 +53,10 @@ describe("validateCreateUser", () => {
 
   it("should return validation errors", async () => {
     // Mock the class-validator's validate function to return errors
-    jest
-      .spyOn(validator, "validate")
-      .mockResolvedValue([
-        "Error 1",
-        "Error 2",
-      ] as unknown as validator.ValidationError[]);
+    mockValidate.mockResolvedValue([
+      "Error 1",
+      "Error 2",
+    ] as unknown as validator.ValidationError[]);
 
     await validateCreateUser(req as Request, res as Response, next);
 
@@ -56,11 +66,9 @@ describe("validateCreateUser", () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  it("should handle internal server errors", async () => {
+  it("should handle internal server errors ", async () => {
     // Mock an error during validation
-    jest
-      .spyOn(validator, "validate")
-      .mockRejectedValue(new Error("Validation error"));
+    mockValidate.mockRejectedValue(new Error("Validation error"));
 
     await validateCreateUser(req as Request, res as Response, next);
 
@@ -68,5 +76,15 @@ describe("validateCreateUser", () => {
     expect(res.json).toHaveBeenCalledWith({ error: "Internal Server Error" });
     expect(req.body).not.toBeInstanceOf(CreateUserDto);
     expect(next).not.toHaveBeenCalled();
+  });
+  it("should log with console.error ", async () => {
+    // Mock an error during validation
+    const error = new Error("Validation error");
+    mockValidate.mockRejectedValue(error);
+
+    await validateCreateUser(req as Request, res as Response, next);
+
+    expect(errorSpy).toHaveBeenCalled();
+    expect(errorSpy).toBeCalledWith("Error during validation:", error);
   });
 });

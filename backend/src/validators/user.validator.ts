@@ -22,7 +22,7 @@ export async function validateCreateUser(
     req.body = createUserDto;
     next();
   } catch (error) {
-    // console.error("Error during validation:", error);
+    console.error("Error during validation:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
