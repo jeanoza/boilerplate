@@ -17,17 +17,18 @@ function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
 	</>
 }
 
-async function onSubmit(data: any) {
-	axios.post("http://localhost:8888/api/user", data)
-		.then(res => {
-			console.log(res);
-		})
-}
-
 export default function SignForm() {
 	const { pathname } = useLocation();
 	const { register, handleSubmit } = useForm();
 	const isSignUp = pathname === "/sign-up" ? true : false;
+
+	async function onSubmit(data: any) {
+		axios.post("http://localhost:8888/api/user", data)
+			.then(res => {
+				console.log(res);
+			})
+	}
+
 	return <form aria-label="signForm" className="form-control items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
 		{isSignUp &&
 			<>

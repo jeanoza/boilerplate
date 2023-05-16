@@ -19,6 +19,11 @@ export class UserService {
   }
   async create(user: User) {
     //validation must be done before controller using validator middle ware...
+    const _user = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+    if (_user) throw new Error("User already exist");
+
     return await this.userRepository.save(user);
   }
   async update(body: User, id: number) {

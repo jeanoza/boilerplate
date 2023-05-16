@@ -98,6 +98,15 @@ describe("UserService", () => {
       expect(userRepository.save).toHaveBeenCalledWith(body);
     });
 
+    it("should throw error if user exist already", async () => {
+      const body = { ...mockUser1 };
+
+      jest.spyOn(userRepository, "findOne").mockResolvedValueOnce(mockUser1);
+      await expect(userService.create(body as User)).rejects.toThrow(
+        "User already exist"
+      );
+    });
+
     it("should throw an error if failed to create user", async () => {
       const body = { ...mockUser1 };
 
