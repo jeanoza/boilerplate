@@ -1,5 +1,6 @@
 import { DeleteResult, Repository } from "typeorm";
 import { User } from "../entities/user.entity";
+import { CreateUserDto } from "../dtos/create-user.dto";
 
 export class UserService {
   constructor(private readonly userRepository: Repository<User>) {}
@@ -17,14 +18,13 @@ export class UserService {
     if (!user) throw new Error("User not found");
     return user;
   }
-  async create(user: User) {
-    //validation must be done before controller using validator middle ware...
-    const _user = await this.userRepository.findOne({
-      where: { email: user.email },
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
     });
-    if (_user) throw new Error("User already exist");
+    if (user) throw new Error("User already exist");
 
-    return await this.userRepository.save(user);
+    return await this.userRepository.save(createUserDto);
   }
   async update(body: User, id: number) {
     const user = await this.findById(id);

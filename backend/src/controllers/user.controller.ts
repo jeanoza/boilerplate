@@ -1,10 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import { validate } from "class-validator";
+import { User } from "../entities/user.entity";
+import { CreateUserDto } from "../dtos/create-user.dto";
 
 export default class UserController {
   constructor(private userService: UserService) {}
 
-  async findAll(req: Request, res: Response, next?: NextFunction) {
+  async findAll(req: Request, res: Response) {
     try {
       const users = await this.userService.findAll();
       res.status(200).json(users);
@@ -12,7 +15,7 @@ export default class UserController {
       res.status(500).json({ error: "Server error" });
     }
   }
-  async findById(req: Request, res: Response, next?: NextFunction) {
+  async findById(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
       const user = await this.userService.findById(id);
@@ -21,7 +24,7 @@ export default class UserController {
       res.status(404).json({ error: error.message });
     }
   }
-  async findByEmail(req: Request, res: Response, next?: NextFunction) {
+  async findByEmail(req: Request, res: Response) {
     try {
       const email = req.params.email;
       const user = await this.userService.findByEmail(email);
@@ -30,17 +33,18 @@ export default class UserController {
       res.status(404).json({ error: error.message });
     }
   }
-  async create(req: Request, res: Response, next?: NextFunction) {
+  async create(req: Request, res: Response) {
     try {
-      const { body } = req;
-      const user = await this.userService.create(body);
-      res.status(200).json(user);
+      const createUserDto = req.body;
+
+      const result = await this.userService.create(createUserDto);
+      res.status(200).json(result);
     } catch (error) {
       res.status(404).json({ error: error.message });
     }
   }
 
-  async update(req: Request, res: Response, next?: NextFunction) {
+  async update(req: Request, res: Response) {
     try {
       const {
         body,
@@ -52,7 +56,7 @@ export default class UserController {
       res.status(500).json({ error: error.message });
     }
   }
-  async delete(req: Request, res: Response, next?: NextFunction) {
+  async delete(req: Request, res: Response) {
     try {
       const {
         params: { id },

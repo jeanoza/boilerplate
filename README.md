@@ -13,3 +13,9 @@ This repository is a boilerplate to use in future
 - Devops: Docker
 
 - Method: TDD
+
+## Feature
+
+### Backend
+
+- add a Mapper(Handler) class like ExceptionHandler in nest or spring to uniformize Error message(ValidationError or etc)

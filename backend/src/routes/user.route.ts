@@ -3,6 +3,7 @@ import UserController from "../controllers/user.controller";
 import { UserService } from "../services/user.service";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
+import { validateCreateUser } from "../validators/user.validator";
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
@@ -10,7 +11,11 @@ const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 //create
-router.post("/", userController.create.bind(userController));
+router.post(
+  "/",
+  validateCreateUser,
+  userController.create.bind(userController)
+);
 //read
 router.get("/", userController.findAll.bind(userController));
 router.get("/:id", userController.findById.bind(userController));
