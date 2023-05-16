@@ -36,7 +36,6 @@ describe("validateCreateUser", () => {
 
   it("should validate and modify the request body", async () => {
     // Mock the class-validator's validate function
-
     mockValidate.mockResolvedValue([]);
 
     await validateCreateUser(req as Request, res as Response, next);
