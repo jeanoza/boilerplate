@@ -18,16 +18,10 @@ function SignBtnCont({ isSignUp }: { isSignUp: boolean }) {
 }
 
 async function onSubmit(data: any) {
-	console.log(data);
-	// fetch("http://localhost:8888/api/user", {
-	// 	method: 'POST',
-	// 	headers: { 'Content-Type': 'application/json' },
-	// 	body: JSON.stringify(data)
-	// }).then(res => res.json())
-	// 	.then(res => { console.log(res); })
-	axios.post("http://localhost:8888/api/user", data).then(res => {
-		console.log(res);
-	})
+	axios.post("http://localhost:8888/api/user", data)
+		.then(res => {
+			console.log(res);
+		})
 }
 
 export default function SignForm() {

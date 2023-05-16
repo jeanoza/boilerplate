@@ -10,6 +10,7 @@ AppDataSource.initialize()
     // create express app
     const app = express();
 
+    // cors, bodyParser
     app.use(express.json());
     app.use(cors());
 

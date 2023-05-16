@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "PORT=3333 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
