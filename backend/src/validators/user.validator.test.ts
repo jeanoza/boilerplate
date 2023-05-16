@@ -29,24 +29,18 @@ describe("validateCreateUser", () => {
 
     await validateCreateUser(req as Request, res as Response, next);
 
-    // Verify that the request body has been modified
     expect(req.body).toBeInstanceOf(CreateUserDto);
     expect(req.body.nickName).toBe("JohnDoe");
     expect(req.body.firstName).toBe("John");
     expect(req.body.lastName).toBe("Doe");
     expect(req.body.age).toBe(25);
-
-    // Verify that the next function has been called
     expect(next).toHaveBeenCalledTimes(1);
-
-    // Verify that response methods were not called
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
   });
 
   it("should return validation errors", async () => {
     // Mock the class-validator's validate function to return errors
-
     jest
       .spyOn(validator, "validate")
       .mockResolvedValue([
@@ -56,14 +50,9 @@ describe("validateCreateUser", () => {
 
     await validateCreateUser(req as Request, res as Response, next);
 
-    // Verify that the response status and json methods were called
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({ errors: ["Error 1", "Error 2"] });
-
-    // Verify that the request body has not been modified
     expect(req.body).not.toBeInstanceOf(CreateUserDto);
-
-    // Verify that the next function has not been called
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -75,14 +64,9 @@ describe("validateCreateUser", () => {
 
     await validateCreateUser(req as Request, res as Response, next);
 
-    // Verify that the response status and json methods were called
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: "Internal Server Error" });
-
-    // Verify that the request body has not been modified
     expect(req.body).not.toBeInstanceOf(CreateUserDto);
-
-    // Verify that the next function has not been called
     expect(next).not.toHaveBeenCalled();
   });
 });
