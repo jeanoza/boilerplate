@@ -59,7 +59,6 @@ export default function SignForm() {
 			const style = { top: `${index * 4}rem` }
 			return <AlertModal alertText={msg} style={style} />
 		})}
-		{/* {alertText && <AlertModal alertText={alertText} />} */}
 		<InputField register={register} type="text" name="Email" placeholder="jean@example.com" testid="commonField" />
 		<InputField register={register} type="password" name="Password" placeholder="1q2w3e4r5t6y!" testid="commonField" />
 		<SignBtnCont isSignUp={isSignUp} />
