@@ -10,16 +10,18 @@ describe("validateCreateUser", () => {
   let errorSpy: jest.SpyInstance;
 
   const mockValidate = jest.spyOn(validator, "validate");
+  const mockUser = {
+    nickName: "JohnDoe",
+    firstName: "John",
+    lastName: "Doe",
+    email: "jdoe@gmail.com",
+    password: "1q2w3e4r5t6yY!",
+    age: 25,
+  };
 
   beforeEach(() => {
     req = {
-      body: {
-        nickName: "JohnDoe",
-        firstName: "John",
-        lastName: "Doe",
-        email: "jdoe@gmail.com",
-        age: 25,
-      },
+      body: { ...mockUser },
     };
     res = {
       status: jest.fn().mockReturnThis(),
@@ -37,14 +39,10 @@ describe("validateCreateUser", () => {
   it("should validate and modify the request body", async () => {
     // Mock the class-validator's validate function
     mockValidate.mockResolvedValue([]);
-
     await validateCreateUser(req as Request, res as Response, next);
 
     expect(req.body).toBeInstanceOf(CreateUserDto);
-    expect(req.body.nickName).toBe("JohnDoe");
-    expect(req.body.firstName).toBe("John");
-    expect(req.body.lastName).toBe("Doe");
-    expect(req.body.age).toBe(25);
+    expect(req.body).toEqual(mockUser);
     expect(next).toHaveBeenCalledTimes(1);
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
@@ -53,14 +51,14 @@ describe("validateCreateUser", () => {
   it("should return validation errors", async () => {
     // Mock the class-validator's validate function to return errors
     mockValidate.mockResolvedValue([
-      "Error 1",
-      "Error 2",
+      { constraints: { testError: "Error 1" } },
+      { constraints: { testError: "Error 2" } },
     ] as unknown as validator.ValidationError[]);
 
     await validateCreateUser(req as Request, res as Response, next);
 
     expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ errors: ["Error 1", "Error 2"] });
+    expect(res.json).toHaveBeenCalledWith({ error: ["Error 1", "Error 2"] });
     expect(req.body).not.toBeInstanceOf(CreateUserDto);
     expect(next).not.toHaveBeenCalled();
   });

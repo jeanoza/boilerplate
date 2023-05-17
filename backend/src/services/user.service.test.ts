@@ -16,6 +16,7 @@ describe("UserService", () => {
     mockUser1.lastName = "Doe";
     mockUser1.age = 18;
     mockUser1.email = "johndoe@example.com";
+    mockUser1.password = "test password";
 
     mockUser2.id = 2;
     mockUser2.nickName = "JPS";
@@ -23,6 +24,7 @@ describe("UserService", () => {
     mockUser2.lastName = "Sartre";
     mockUser2.age = 81;
     mockUser2.email = "jean.paul@gmail.com";
+    mockUser2.password = "test password";
 
     userRepository = {
       find: jest.fn(),

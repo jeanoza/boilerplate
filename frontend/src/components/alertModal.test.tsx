@@ -6,8 +6,9 @@ describe("<AlertModal />", () => {
 		const alertText = "Test alert"
 		render(<AlertModal alertText={alertText} />);
 
-		const container = screen.getByText(/test alert/i);
+		const textSpan = screen.getByText(/test alert/i);
 
-		expect(container).toBeInTheDocument();
+		expect(textSpan).toBeInTheDocument();
+		expect(textSpan).toHaveTextContent(alertText);
 	})
 })

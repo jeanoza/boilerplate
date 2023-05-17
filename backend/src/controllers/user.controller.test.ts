@@ -17,11 +17,13 @@ describe("UserController", () => {
   user.lastName = "Doe";
   user.age = 18;
   user.email = "john@gmail.com";
+  user.password = "test password";
   const user2: User = new User();
   user2.firstName = "Jean-Paul";
   user2.lastName = "Sartre";
   user2.age = 81;
   user2.email = "jean.paul@gmail.com";
+  user2.password = "test password";
   const users: User[] = [user, user2];
 
   beforeEach(() => {
