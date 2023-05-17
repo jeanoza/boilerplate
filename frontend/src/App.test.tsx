@@ -30,10 +30,10 @@ describe('App', () => {
 				<App />
 			</MemoryRouter>
 		);
-		const title = screen.getByTestId('signTitle')
+		const signBtn = screen.getByTestId('signBtn')
 
-		expect(title).toBeInTheDocument();
-		expect(title).toHaveTextContent(/sign up/i)
+		expect(signBtn).toBeInTheDocument();
+		expect(signBtn).toHaveTextContent(/sign up/i)
 
 	});
 
@@ -44,10 +44,10 @@ describe('App', () => {
 			</MemoryRouter>
 		);
 
-		const title = screen.getByTestId('signTitle')
+		const signBtn = screen.getByTestId('signBtn')
 
-		expect(title).toBeInTheDocument();
-		expect(title).toHaveTextContent(/sign in/i)
+		expect(signBtn).toBeInTheDocument();
+		expect(signBtn).toHaveTextContent(/sign in/i)
 
 	});
 });
