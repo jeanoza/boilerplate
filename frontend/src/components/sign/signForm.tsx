@@ -30,6 +30,7 @@ export default function SignForm() {
 	}
 
 	return <form aria-label="signForm" className="form-control items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+		<h3 data-testid="signTitle">{isSignUp ? "Sign Up" : "Sign In"}</h3>
 		{isSignUp &&
 			<>
 				<InputField register={register} type="text" name="Nick name" placeholder="Name to use in this site" testid="signUpField" />

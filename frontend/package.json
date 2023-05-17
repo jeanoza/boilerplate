@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "PORT=3333 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage",
+    "test": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -53,12 +53,11 @@
     "@svgr/webpack": "$@svgr/webpack"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.tsx",
-      "src/**/*.ts"
-    ],
     "transformIgnorePatterns": [
       "node_modules/(?!axios)"
+    ],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s(x|)"
     ]
   }
 }

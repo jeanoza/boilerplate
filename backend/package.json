@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest --coverage --watchAll=true",
+    "test": "npx jest --coverage --watchAll",
     "dev": "npx nodemon",
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs"
