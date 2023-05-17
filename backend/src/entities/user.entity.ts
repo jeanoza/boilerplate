@@ -4,6 +4,8 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
+  MinLength,
 } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
@@ -34,4 +36,10 @@ export class User extends BaseEntity {
   @IsEmail()
   @Column()
   email: string;
+
+  @IsString()
+  @MinLength(8)
+  @MaxLength(20)
+  @Column()
+  password: string;
 }

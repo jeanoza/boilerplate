@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   entities: [User],
-  // dropSchema: true, // drop all table when restart
+  dropSchema: true, // drop all table when restart
   // migrations: [],
   // subscribers: [],
 });
