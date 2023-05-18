@@ -4,7 +4,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import SignForm from "./signForm";
 import { BrowserRouter, Location } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import React from "react";
 
 

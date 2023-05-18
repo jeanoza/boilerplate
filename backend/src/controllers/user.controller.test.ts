@@ -136,10 +136,10 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(user);
     });
-    it("sholud return an error when fail on validation", async () => {
+    it("sholud return an error(404) when fail on validation", async () => {
       jest
         .spyOn(userService, "create")
-        .mockRejectedValueOnce(new Error("Contains null attribut"));
+        .mockRejectedValue(new Error("Contains null attribut"));
 
       await userController.create(req, res);
 
@@ -147,6 +147,20 @@ describe("UserController", () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: "Contains null attribut",
+      });
+    });
+
+    it("sholud return an error(409) when input email exist already in db", async () => {
+      jest
+        .spyOn(userService, "create")
+        .mockRejectedValue(new Error("User already exist"));
+
+      await userController.create(req, res);
+
+      expect(userService.create).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "User already exist",
       });
     });
   });

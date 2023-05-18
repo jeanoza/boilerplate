@@ -16,16 +16,20 @@ export class User extends BaseEntity {
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(4)
+  @MaxLength(20)
   @Column()
   nickName: string;
 
   @IsNotEmpty()
   @IsString()
+  @MaxLength(20)
   @Column()
   firstName: string;
 
   @IsNotEmpty()
   @Column()
+  @MaxLength(20)
   lastName: string;
 
   @IsOptional()
@@ -33,6 +37,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   age: number;
 
+  @IsNotEmpty()
   @IsEmail()
   @Column()
   email: string;

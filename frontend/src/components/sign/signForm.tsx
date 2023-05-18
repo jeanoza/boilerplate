@@ -34,6 +34,8 @@ export default function SignForm() {
 				})
 		} else {
 			//sign in with auth
+			// const url = "http://localhost:8888/api/user"
+			// axios.get(url, 
 		}
 	}
 
