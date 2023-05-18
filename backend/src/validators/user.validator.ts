@@ -13,7 +13,7 @@ export async function validateCreateUser(
     createUserDto.nickName = body.nickName;
     createUserDto.firstName = body.firstName;
     createUserDto.lastName = body.lastName;
-    createUserDto.email = body.email;
+    createUserDto.email = body.email.toLowerCase(); // FIXME: this way is correct and clean?
     createUserDto.password = body.password;
     createUserDto.age = body.age;
 
