@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { validate } from "class-validator";
-import { User } from "../entities/user.entity";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { generateToken } from "../middlewares/auth";
 
 export default class UserController {
   constructor(private userService: UserService) {}
@@ -36,10 +34,11 @@ export default class UserController {
   async create(req: Request, res: Response) {
     try {
       const createUserDto = req.body;
-
-      const result = await this.userService.create(createUserDto);
-      res.status(200).json(result);
+      const user = await this.userService.create(createUserDto);
+      const accessToken = generateToken({ id: user.id, email: user.email });
+      res.status(201).json({ accessToken });
     } catch (error) {
+      // console.log(error);
       const code = error.message === "User already exist" ? 409 : 404;
       res.status(code).json({ error: error.message });
     }

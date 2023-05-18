@@ -28,9 +28,7 @@ export class UserService {
 
     //TODO: hash pw using bcrpyt
     createUserDto.password = await bcrypt.hash(createUserDto.password, 12);
-    const user = await this.userRepository.save(createUserDto);
-    const token = generateToken({ id: user.id, email: user.email });
-    return { token };
+    return await this.userRepository.save(createUserDto);
   }
   async update(body: User, id: number) {
     const user = await this.findById(id);

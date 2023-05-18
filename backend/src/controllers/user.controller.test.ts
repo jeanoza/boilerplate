@@ -4,12 +4,16 @@ import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
 import { User } from "../entities/user.entity";
 import { DeleteResult } from "typeorm";
+import * as auth from "../middlewares/auth";
 
 describe("UserController", () => {
   let userController: UserController;
   let userService: UserService;
   let req: Request;
   let res: Response<any, Record<string, any>>;
+
+  //env in test
+  const env = process.env;
 
   //mocks entity
   const user: User = new User();
@@ -42,6 +46,16 @@ describe("UserController", () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     } as unknown as Response;
+
+    //before put JWT_SECRET
+    //without these lines, env.JWT_SECRET is undefined in jest
+    jest.resetModules();
+    process.env = { ...env };
+    process.env.JWT_SECRET = "jwt-secret";
+  });
+
+  afterEach(() => {
+    process.env = env;
   });
 
   describe("findAll", () => {
@@ -127,15 +141,14 @@ describe("UserController", () => {
   describe("create", () => {
     it("sholud return a user", async () => {
       req = { body: user } as unknown as Request;
-      jest
-        .spyOn(userService, "create")
-        .mockResolvedValueOnce({ token: "test-token" });
+      jest.spyOn(userService, "create").mockResolvedValueOnce(user);
+      jest.spyOn(auth, "generateToken").mockReturnValueOnce("test-token");
 
       await userController.create(req, res);
 
       expect(userService.create).toHaveBeenCalledWith(user);
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ token: "test-token" });
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({ accessToken: "test-token" });
     });
     it("sholud return an error(404) when fail on validation", async () => {
       jest
