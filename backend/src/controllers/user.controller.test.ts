@@ -45,6 +45,7 @@ describe("UserController", () => {
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
+      cookie: jest.fn(),
     } as unknown as Response;
 
     //before put JWT_SECRET
@@ -148,7 +149,12 @@ describe("UserController", () => {
 
       expect(userService.create).toHaveBeenCalledWith(user);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ accessToken: "test-token" });
+      expect(res.json).toHaveBeenCalledWith({ success: true });
+      expect(res.cookie).toHaveBeenCalledWith("accessToken", "test-token", {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000,
+      });
     });
     it("sholud return an error(404) when fail on validation", async () => {
       jest

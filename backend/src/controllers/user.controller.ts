@@ -36,9 +36,14 @@ export default class UserController {
       const createUserDto = req.body;
       const user = await this.userService.create(createUserDto);
       const accessToken = generateToken({ id: user.id, email: user.email });
-      res.status(201).json({ accessToken });
+      console.log(accessToken);
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000, // to config in env
+      });
+      res.status(201).json({ success: true });
     } catch (error) {
-      // console.log(error);
       const code = error.message === "User already exist" ? 409 : 404;
       res.status(code).json({ error: error.message });
     }

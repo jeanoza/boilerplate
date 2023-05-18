@@ -17,12 +17,15 @@ export default function SignForm() {
 	async function onSubmit(data: any) {
 		if (isSignUp) {
 			const url = "http://localhost:8888/api/user"
-			axios.post(url, data)
+			axios.post(url, data, {
+				withCredentials: true
+			})
 				.then(res => {
 					// console.log(res);
 					reset();
 					window.alert('Form submitted');
 				}).catch(error => {
+					console.log(error);
 					const _error = error.response.data.error
 					const isOneError = typeof _error === 'string';
 					if (_error) {

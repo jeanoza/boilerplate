@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser";
 
 import cors from "cors";
 import { AppDataSource } from "./data-source";
@@ -10,9 +11,15 @@ AppDataSource.initialize()
     // create express app
     const app = express();
 
-    // cors, bodyParser
+    // cors, bodyParser, cookieParser
     app.use(express.json());
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "http://localhost:3333", //TO put in env
+        credentials: true,
+      })
+    );
+    app.use(cookieParser());
 
     //routers
     app.use("/api/user", userRouter);
