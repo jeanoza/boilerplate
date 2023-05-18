@@ -1,21 +1,18 @@
+/* eslint-disable testing-library/no-unnecessary-act */
 /* eslint-disable testing-library/no-render-in-setup */
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import SignForm from "./signForm";
 import { BrowserRouter, Location } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import React from "react";
 
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
 	useLocation: jest.fn(),
 }));
-// jest.mock("axios", () => ({
-// 	...jest.requireActual('axios'),
-// 	post: jest.fn()
-// }));
-
-// jest.mock("axios");
+jest.mock("axios");
 describe('<SignForm/>', () => {
 
 	describe("/sign-up router", () => {
@@ -37,19 +34,70 @@ describe('<SignForm/>', () => {
 			expect(signUpFields.length).toBe(3);
 		})
 
-		it('send form data on click submit button', () => {
+		it('should send form data on click submit button', async () => {
+			(axios.post as jest.Mock).mockImplementation(() => Promise.resolve({ data: {} }));
 			const signForm = screen.getByRole('form');
 			const submitBtn = screen.getByRole('button');
 			const handleSubmitMock = jest.fn();
+			window.alert = jest.fn();
 
 			signForm.addEventListener('submit', handleSubmitMock);
-			fireEvent.submit(submitBtn);
-			expect(handleSubmitMock).toHaveBeenCalled();
+
+			fireEvent.change(screen.getByLabelText("Nick name"), {
+				target: { value: "TestUser" },
+			});
+			fireEvent.change(screen.getByLabelText("First name"), {
+				target: { value: "John" },
+			});
+			fireEvent.change(screen.getByLabelText("Last name"), {
+				target: { value: "Doe" },
+			});
+			fireEvent.change(screen.getByLabelText("Email"), {
+				target: { value: "test@example.com" },
+			});
+			fireEvent.change(screen.getByLabelText("Password"), {
+				target: { value: "testpassword" },
+			});
+
+			await act(async () => {
+				fireEvent.submit(submitBtn);
+			})
+
+			expect(axios.post).toHaveBeenCalledWith(
+				"http://localhost:8888/api/user",
+				{
+					nickName: "TestUser",
+					firstName: "John",
+					lastName: "Doe",
+					email: "test@example.com",
+					password: "testpassword",
+				}
+			);
 		})
 
-		// it('should receive 200 when success /api/user/sign-up request', async () => {
+		it('should throw error when fail on validation', async () => {
+			const axiosError = {
+				response: {
+					status: "500",
+					data: {
+						message: "Internal Server Error",
+					},
+				},
+			};
+			(axios.post as jest.Mock).mockRejectedValue(axiosError)
+			const submitBtn = screen.getByRole('button');
+			await act(async () => {
+				fireEvent.submit(submitBtn);
+			})
 
-		// })
+			// Assertions
+			await expect(axios.post).rejects.toEqual(axiosError);
+
+			// Clean up
+			jest.useRealTimers();
+		})
+
+
 	})
 	describe("/sign-in router", () => {
 		beforeEach(() => {

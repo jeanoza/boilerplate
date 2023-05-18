@@ -13,14 +13,13 @@ export default function SignForm() {
 	const { reset, register, handleSubmit } = useForm();
 	const isSignUp = pathname === "/sign-up" ? true : false;
 	const [errors, setErrors] = useState<unknown[]>([]);
-	// const [error, setError] = useState<string | undefined>(undefined);
 
 	async function onSubmit(data: any) {
 		if (isSignUp) {
 			const url = "http://localhost:8888/api/user"
 			axios.post(url, data)
 				.then(res => {
-					console.log(res);
+					// console.log(res);
 					reset();
 					window.alert('Form submitted');
 				}).catch(error => {
