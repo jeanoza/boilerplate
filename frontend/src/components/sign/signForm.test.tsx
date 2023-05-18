@@ -71,7 +71,7 @@ describe('<SignForm/>', () => {
 					lastName: "Doe",
 					email: "test@example.com",
 					password: "testpassword",
-				}
+				}, { "withCredentials": true },
 			);
 		})
 

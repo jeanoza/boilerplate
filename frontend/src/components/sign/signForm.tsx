@@ -25,7 +25,7 @@ export default function SignForm() {
 					reset();
 					window.alert('Form submitted');
 				}).catch(error => {
-					console.log(error);
+					// console.log(error);
 					const _error = error.response.data.error
 					const isOneError = typeof _error === 'string';
 					if (_error) {
