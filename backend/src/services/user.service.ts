@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { CreateUserDto } from "../dtos/create-user.dto";
 import bcrypt, { hash } from "bcrypt";
+import { generateToken } from "../middlewares/auth";
 
 export class UserService {
   constructor(private readonly userRepository: Repository<User>) {}
@@ -20,14 +21,16 @@ export class UserService {
     return user;
   }
   async create(createUserDto: CreateUserDto) {
-    const user = await this.userRepository.findOne({
+    const existUser = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
-    if (user) throw new Error("User already exist");
+    if (existUser) throw new Error("User already exist");
 
     //TODO: hash pw using bcrpyt
     createUserDto.password = await bcrypt.hash(createUserDto.password, 12);
-    return await this.userRepository.save(createUserDto);
+    const user = await this.userRepository.save(createUserDto);
+    const token = generateToken({ id: user.id, email: user.email });
+    return { token };
   }
   async update(body: User, id: number) {
     const user = await this.findById(id);

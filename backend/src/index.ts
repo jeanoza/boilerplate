@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
+
 import cors from "cors";
 import { AppDataSource } from "./data-source";
 import userRouter from "./routes/user.route";
-import { User } from "./entities/user.entity";
 import "reflect-metadata";
 
 AppDataSource.initialize()

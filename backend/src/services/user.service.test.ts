@@ -1,6 +1,7 @@
 import { DeleteResult, Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
+import { generateToken } from "../middlewares/auth";
 
 describe("UserService", () => {
   let userRepository: Repository<User>;
@@ -8,6 +9,7 @@ describe("UserService", () => {
   const mockUser1: User = new User();
   const mockUser2: User = new User();
   const mockUserList: User[] = [mockUser1, mockUser2];
+  const env = process.env;
 
   beforeEach(() => {
     mockUser1.id = 1;
@@ -34,6 +36,14 @@ describe("UserService", () => {
     } as unknown as Repository<User>;
 
     userService = new UserService(userRepository);
+
+    jest.resetModules();
+    process.env = { ...env };
+    process.env.JWT_SECRET = "jwt-secret";
+  });
+
+  afterEach(() => {
+    process.env = env;
   });
 
   describe("findAll", () => {
@@ -90,13 +100,13 @@ describe("UserService", () => {
   });
 
   describe("create", () => {
-    it("should create and return a new user", async () => {
+    it("should create and return a token", async () => {
       const body = { ...mockUser1 };
 
       jest.spyOn(userRepository, "save").mockResolvedValueOnce(mockUser1);
 
-      const result = await userService.create(body as User);
-      expect(result).toStrictEqual(mockUser1);
+      await userService.create(body as User);
+
       expect(userRepository.save).toHaveBeenCalledWith(body);
     });
 

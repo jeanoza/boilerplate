@@ -127,14 +127,15 @@ describe("UserController", () => {
   describe("create", () => {
     it("sholud return a user", async () => {
       req = { body: user } as unknown as Request;
-
-      jest.spyOn(userService, "create").mockResolvedValueOnce(user);
+      jest
+        .spyOn(userService, "create")
+        .mockResolvedValueOnce({ token: "test-token" });
 
       await userController.create(req, res);
 
       expect(userService.create).toHaveBeenCalledWith(user);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(user);
+      expect(res.json).toHaveBeenCalledWith({ token: "test-token" });
     });
     it("sholud return an error(404) when fail on validation", async () => {
       jest
