@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { CreateUserDto } from "../../dtos/create-user.dto";
 import { validate } from "class-validator";
 
 export async function validateCreateUser(

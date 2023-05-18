@@ -1,7 +1,7 @@
 import * as validator from "class-validator";
 import { NextFunction, Request, Response } from "express";
 import { validateCreateUser } from "./user.validator";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { CreateUserDto } from "../../dtos/create-user.dto";
 
 describe("validateCreateUser", () => {
   let req: Partial<Request>;
