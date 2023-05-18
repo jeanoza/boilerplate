@@ -40,7 +40,6 @@ export default class UserController {
       const result = await this.userService.create(createUserDto);
       res.status(200).json(result);
     } catch (error) {
-      // console.log("here", error.message);
       const code = error.message === "User already exist" ? 409 : 404;
       res.status(code).json({ error: error.message });
     }
