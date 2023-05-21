@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { generateToken } from "../middlewares/auth";
+import { generateToken } from "../middlewares/jwt";
 
 export default class UserController {
   constructor(private userService: UserService) {}
@@ -36,7 +36,6 @@ export default class UserController {
       const createUserDto = req.body;
       const user = await this.userService.create(createUserDto);
       const accessToken = generateToken({ id: user.id, email: user.email });
-      console.log(accessToken);
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,

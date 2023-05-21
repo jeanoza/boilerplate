@@ -4,7 +4,7 @@ import { UserService } from "../services/user.service";
 import { expect, describe, beforeEach, it, jest } from "@jest/globals";
 import { User } from "../entities/user.entity";
 import { DeleteResult } from "typeorm";
-import * as auth from "../middlewares/auth";
+import * as auth from "../middlewares/jwt";
 
 describe("UserController", () => {
   let userController: UserController;

@@ -1,7 +1,7 @@
-import { generateToken, verifyToken } from "./auth";
+import { generateToken, verifyToken } from "./jwt";
 import { verify, sign } from "jsonwebtoken";
 
-describe("auth", () => {
+describe("jwt", () => {
   const env = process.env;
   beforeEach(() => {
     jest.resetModules();
