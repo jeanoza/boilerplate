@@ -143,7 +143,7 @@ describe("UserController", () => {
     it("sholud return a user", async () => {
       req = { body: user } as unknown as Request;
       jest.spyOn(userService, "create").mockResolvedValueOnce(user);
-      jest.spyOn(auth, "generateToken").mockReturnValueOnce("test-token");
+      jest.spyOn(auth, "generateAccessToken").mockReturnValueOnce("test-token");
 
       await userController.create(req, res);
 

@@ -1,25 +1,33 @@
-import { generateToken, verifyToken } from "./jwt";
-import { verify, sign } from "jsonwebtoken";
+import { generateAccessToken, verifyToken } from "./jwt";
+import jwt from "jsonwebtoken";
 
+jest.mock("jsonwebtoken");
 describe("jwt", () => {
-  const env = process.env;
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...env };
-    process.env.JWT_SECRET = "jwt-secret";
-  });
+  let signMock = jwt.sign as jest.Mock;
 
   afterEach(() => {
-    process.env = env;
+    signMock.mockRestore();
   });
+
   it("should return a token", async () => {
+    signMock.mockReturnValue("mocked-token");
+    const payload = { id: 1, email: "test@example.com" };
+    const result = generateAccessToken(payload);
+
+    expect(result).toBe("mocked-token");
+    expect(signMock).toHaveBeenCalledTimes(1);
+    expect(signMock).toBeCalledWith(payload, undefined, { expiresIn: "1h" });
+  });
+  it("should throw a error when jwt.sign throw error", async () => {
+    signMock.mockImplementation(() => {
+      throw new Error("sign function error");
+    });
     const payload = { id: 1, email: "test@example.com" };
 
-    const expected = sign(payload, "jwt-secret", {
-      expiresIn: "1h",
-    });
-    const result = generateToken(payload);
-
-    expect(result).toStrictEqual(expected);
+    expect(() => generateAccessToken(payload)).toThrowError(
+      "sign function error"
+    );
+    expect(signMock).toHaveBeenCalledTimes(1);
+    expect(signMock).toBeCalledWith(payload, undefined, { expiresIn: "1h" });
   });
 });
