@@ -1,33 +1,52 @@
 import { generateAccessToken, verifyToken } from "./jwt";
-import jwt from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 jest.mock("jsonwebtoken");
 describe("jwt", () => {
-  let signMock = jwt.sign as jest.Mock;
-
-  afterEach(() => {
-    signMock.mockRestore();
+  const env = process.env;
+  beforeAll(() => {
+    process.env = { ...env };
+    process.env.JWT_SECRET = "jwt-secret";
   });
-
-  it("should return a token", async () => {
-    signMock.mockReturnValue("mocked-token");
-    const payload = { id: 1, email: "test@example.com" };
-    const result = generateAccessToken(payload);
-
-    expect(result).toBe("mocked-token");
-    expect(signMock).toHaveBeenCalledTimes(1);
-    expect(signMock).toBeCalledWith(payload, undefined, { expiresIn: "1h" });
+  afterAll(() => {
+    process.env = env;
   });
-  it("should throw a error when jwt.sign throw error", async () => {
-    signMock.mockImplementation(() => {
-      throw new Error("sign function error");
+  describe("generateAccessToken", () => {
+    const signMock = sign as jest.Mock;
+
+    afterEach(() => {
+      signMock.mockRestore();
     });
-    const payload = { id: 1, email: "test@example.com" };
+    it("should return a token", async () => {
+      signMock.mockReturnValue("mocked-token");
+      const payload = { id: 1, email: "test@example.com" };
+      const result = generateAccessToken(payload);
 
-    expect(() => generateAccessToken(payload)).toThrowError(
-      "sign function error"
-    );
-    expect(signMock).toHaveBeenCalledTimes(1);
-    expect(signMock).toBeCalledWith(payload, undefined, { expiresIn: "1h" });
+      expect(result).toBe("mocked-token");
+      expect(signMock).toHaveBeenCalledTimes(1);
+      expect(signMock).toBeCalledWith(payload, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    });
+    it("should throw a error when jwt.sign throw error", () => {
+      signMock.mockImplementation(() => {
+        throw new Error("sign function error");
+      });
+      const payload = { id: 1, email: "test@example.com" };
+
+      expect(() => generateAccessToken(payload)).toThrowError(
+        "sign function error"
+      );
+      expect(signMock).toHaveBeenCalledTimes(1);
+      expect(signMock).toBeCalledWith(payload, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    });
   });
+  // describe("verifyToken", () => {
+  //   const verifyMock = jwt.verify as jest.Mock;
+  //   it("should return true when token is correct", () => {
+  //     verifyMock;
+  //   });
+  // });
 });
