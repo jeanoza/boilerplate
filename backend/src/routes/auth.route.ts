@@ -2,29 +2,26 @@ import express from "express";
 import { UserService } from "../services/user.service";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
+import { AuthController } from "../controllers/auth.controller";
+import { validateCreateUser } from "../middlewares/validators/user.validator";
 
 const router = express.Router();
 
 const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
-// const authController;
+const authController = new AuthController(userService);
 
-//getCurrentUserInfo by token
-router.get("/", (req, res, next) => {
-  console.log("current User");
-  res.send("current User");
-});
-
-//signin
+//signin(login)
 router.post("/signin", (req, res, next) => {
   console.log("signin");
   res.send("signin");
 });
 
-//signup
-router.post("/signup", (req, res, next) => {
-  console.log("signup");
-  res.send("signup");
-});
+//signup(register)
+router.post(
+  "/signup",
+  validateCreateUser,
+  authController.register.bind(authController)
+);
 
 export default router;
