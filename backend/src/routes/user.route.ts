@@ -3,7 +3,6 @@ import { UserController } from "../controllers/user.controller";
 import { UserService } from "../services/user.service";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
-import { validateCreateUser } from "../middlewares/validators/user.validator";
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
