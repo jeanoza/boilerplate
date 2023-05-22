@@ -35,7 +35,6 @@ describe("jwt", () => {
       signMock.mockImplementation(() => {
         throw new Error("sign function error");
       });
-      // const payload = { id: 1, email: "test@example.com" };
 
       expect(() => generateAccessToken(payload)).toThrowError(
         "sign function error"
