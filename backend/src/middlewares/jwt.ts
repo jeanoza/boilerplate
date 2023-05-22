@@ -23,4 +23,10 @@ export function generateAccessToken(payload: Payload) {
 //   return token;
 // }
 
-export function verifyToken() {}
+export function verifyToken(token: string) {
+  try {
+    return verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    throw error;
+  }
+}
