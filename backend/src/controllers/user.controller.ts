@@ -3,7 +3,7 @@ import { UserService } from "../services/user.service";
 import { generateAccessToken } from "../middlewares/jwt";
 
 export default class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   async findAll(req: Request, res: Response) {
     try {

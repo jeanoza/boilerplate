@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { CreateUserDto } from "../dtos/create-user.dto";
-import bcrypt, { hash } from "bcrypt";
+import { hash } from "bcrypt";
 
 export class UserService {
   constructor(private readonly userRepository: Repository<User>) {}

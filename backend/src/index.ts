@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { AppDataSource } from "./data-source";
 import userRouter from "./routes/user.route";
+import authRouter from "./routes/auth.route";
 import "reflect-metadata";
 
 AppDataSource.initialize()
@@ -23,6 +24,7 @@ AppDataSource.initialize()
 
     //routers
     app.use("/api/user", userRouter);
+    app.use("/api/auth", authRouter);
 
     // start express server
     app.listen(process.env.SERVER_PORT);
