@@ -64,7 +64,7 @@ describe('<SignForm/>', () => {
 			})
 
 			expect(axios.post).toHaveBeenCalledWith(
-				"http://localhost:8888/api/user",
+				"http://localhost:8888/api/auth/signup",
 				{
 					nickName: "TestUser",
 					firstName: "John",

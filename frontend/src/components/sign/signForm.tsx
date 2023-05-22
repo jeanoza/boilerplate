@@ -16,7 +16,7 @@ export default function SignForm() {
 
 	async function onSubmit(data: any) {
 		if (isSignUp) {
-			const url = "http://localhost:8888/api/user"
+			const url = "http://localhost:8888/api/auth/signup"
 			axios.post(url, data, {
 				withCredentials: true
 			})

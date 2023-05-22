@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { generateAccessToken } from "../middlewares/jwt";
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
