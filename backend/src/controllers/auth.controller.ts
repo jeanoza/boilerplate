@@ -9,10 +9,12 @@ export class AuthController {
     try {
       const createUserDto = req.body;
       const user = await this.userService.create(createUserDto);
+
       const accessToken = generateAccessToken({
         id: user.id,
         email: user.email,
       });
+
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,

@@ -42,8 +42,9 @@ describe("AuthController", () => {
   afterEach(() => {
     process.env = env;
   });
+
   describe("register", () => {
-    it("sholud return a user", async () => {
+    it("sholud return a response {success:true} and access token via cookie ", async () => {
       req = { body: user } as unknown as Request;
       jest.spyOn(userService, "create").mockResolvedValueOnce(user);
       jest.spyOn(auth, "generateAccessToken").mockReturnValueOnce("test-token");
@@ -59,6 +60,7 @@ describe("AuthController", () => {
         maxAge: 60 * 60 * 1000,
       });
     });
+
     it("sholud return an 500 error when fail on validation", async () => {
       const error = "Internal Server Error";
       jest.spyOn(userService, "create").mockRejectedValue(new Error(error));
@@ -80,5 +82,9 @@ describe("AuthController", () => {
       expect(res.status).toHaveBeenCalledWith(409);
       expect(res.json).toHaveBeenCalledWith({ error });
     });
+  });
+
+  describe("login", () => {
+    it("should return a");
   });
 });
