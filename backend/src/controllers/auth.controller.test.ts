@@ -59,32 +59,26 @@ describe("AuthController", () => {
         maxAge: 60 * 60 * 1000,
       });
     });
-    it("sholud return an error(404) when fail on validation", async () => {
-      jest
-        .spyOn(userService, "create")
-        .mockRejectedValue(new Error("Contains null attribut"));
+    it("sholud return an 500 error when fail on validation", async () => {
+      const error = "Internal Server Error";
+      jest.spyOn(userService, "create").mockRejectedValue(new Error(error));
 
       await authController.register(req, res);
 
       expect(userService.create).toHaveBeenCalledWith(req.body);
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
-        error: "Contains null attribut",
-      });
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error });
     });
 
     it("sholud return an error(409) when input email exist already in db", async () => {
-      jest
-        .spyOn(userService, "create")
-        .mockRejectedValue(new Error("User already exist"));
+      const error = "User already exist";
+      jest.spyOn(userService, "create").mockRejectedValue(new Error(error));
 
       await authController.register(req, res);
 
       expect(userService.create).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(409);
-      expect(res.json).toHaveBeenCalledWith({
-        error: "User already exist",
-      });
+      expect(res.json).toHaveBeenCalledWith({ error });
     });
   });
 });

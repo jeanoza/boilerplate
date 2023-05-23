@@ -20,9 +20,7 @@ This repository is a boilerplate to use in future
 
 - auth router, service, controller:
 
-- [x] GET "/": verify token then send payload or throw error
-
-- [ ] POST "/signin": verify exist user then send a token by cookie
+- [x] POST "/signin": verify exist user then send a token by cookie
 
 - [ ] POST "/signup": create user then then send a token by cookie
 

@@ -20,7 +20,9 @@ export class AuthController {
       });
       res.status(201).json({ success: true });
     } catch (error) {
-      const code = error.message === "User already exist" ? 409 : 404;
+      const existAlready = error.message === "User already exist";
+      //409 conflict when user exist already
+      const code = existAlready ? 409 : 500;
       res.status(code).json({ error: error.message });
     }
   }
