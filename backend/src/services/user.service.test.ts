@@ -1,6 +1,8 @@
 import { DeleteResult, Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
+import { LoginUserDto } from "../dtos/login-user.dto";
+import bcrypt from "bcrypt";
 
 describe("UserService", () => {
   let userRepository: Repository<User>;
@@ -89,7 +91,44 @@ describe("UserService", () => {
     });
   });
 
-  describe("findByEmailAndPassword", () => {});
+  describe("findByEmailAndPassword", () => {
+    const ERROR_MSG = "Wrong email or password";
+    const loginUserDto = new LoginUserDto();
+    loginUserDto.email = mockUser1.email;
+    loginUserDto.password = mockUser1.password;
+
+    it("should return a user by mail and password", async () => {
+      jest.spyOn(userRepository, "findOne").mockResolvedValueOnce(mockUser1);
+      jest
+        .spyOn(bcrypt, "compare")
+        .mockImplementation(() => Promise.resolve(true));
+
+      const result = await userService.findByEmailAndPassword(loginUserDto);
+
+      expect(result).toStrictEqual(mockUser1);
+    });
+
+    it("should throw a error when email is wrong", async () => {
+      jest
+        .spyOn(userRepository, "findOne")
+        .mockImplementation(() => Promise.resolve(null));
+
+      await expect(
+        userService.findByEmailAndPassword(loginUserDto)
+      ).rejects.toThrow(ERROR_MSG);
+    });
+
+    it("should throw a error when password is wrong", async () => {
+      jest.spyOn(userRepository, "findOne").mockResolvedValueOnce(mockUser1);
+      jest
+        .spyOn(bcrypt, "compare")
+        .mockImplementation(() => Promise.resolve(false));
+
+      await expect(
+        userService.findByEmailAndPassword(loginUserDto)
+      ).rejects.toThrow(ERROR_MSG);
+    });
+  });
 
   describe("create", () => {
     it("should create and return a user", async () => {
