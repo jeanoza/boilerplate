@@ -16,7 +16,7 @@ export class User extends BaseEntity {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(4)
+  @MinLength(1)
   @MaxLength(20)
   @Column()
   nickName: string;

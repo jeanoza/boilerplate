@@ -12,10 +12,7 @@ const userService = new UserService(userRepository);
 const authController = new AuthController(userService);
 
 //signin(login)
-router.post("/signin", (req, res, next) => {
-  console.log("signin");
-  res.send("signin");
-});
+router.post("/signin", authController.login.bind(authController));
 
 //signup(register)
 router.post(

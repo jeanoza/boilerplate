@@ -14,17 +14,18 @@ describe("AuthController", () => {
   const env = process.env;
 
   //mocks entity
-  const user: User = new User();
-  user.firstName = "John";
-  user.lastName = "Doe";
-  user.age = 18;
-  user.email = "john@gmail.com";
-  user.password = "test password";
+  const mockUser: User = new User();
+  mockUser.firstName = "John";
+  mockUser.lastName = "Doe";
+  mockUser.age = 18;
+  mockUser.email = "john@gmail.com";
+  mockUser.password = "test password";
 
   beforeEach(() => {
     //mocks service functions
     userService = {
       create: jest.fn(),
+      findByEmailAndPassword: jest.fn(),
     } as unknown as UserService;
     authController = new AuthController(userService);
     req = {} as Request;
@@ -45,13 +46,13 @@ describe("AuthController", () => {
 
   describe("register", () => {
     it("sholud return a response {success:true} and access token via cookie ", async () => {
-      req = { body: user } as unknown as Request;
-      jest.spyOn(userService, "create").mockResolvedValueOnce(user);
+      req = { body: mockUser } as unknown as Request;
+      jest.spyOn(userService, "create").mockResolvedValueOnce(mockUser);
       jest.spyOn(auth, "generateAccessToken").mockReturnValueOnce("test-token");
 
       await authController.register(req, res);
 
-      expect(userService.create).toHaveBeenCalledWith(user);
+      expect(userService.create).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({ success: true });
       expect(res.cookie).toHaveBeenCalledWith("accessToken", "test-token", {
@@ -85,6 +86,43 @@ describe("AuthController", () => {
   });
 
   describe("login", () => {
-    it("should return a");
+    it("should return a response {success:true} and access token via cookie", async () => {
+      req = {
+        body: { email: mockUser.email, password: mockUser.password },
+      } as unknown as Request;
+
+      jest
+        .spyOn(userService, "findByEmailAndPassword")
+        .mockResolvedValueOnce(mockUser);
+      jest.spyOn(auth, "generateAccessToken").mockReturnValueOnce("test-token");
+
+      await authController.login(req, res);
+
+      expect(userService.findByEmailAndPassword).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ success: true });
+      expect(res.cookie).toHaveBeenCalledWith("accessToken", "test-token", {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000,
+      });
+    });
+    it("should throw error when wrong email or password", async () => {
+      const error = "Wrong email or password";
+      req = {
+        body: { email: mockUser.email, password: mockUser.password },
+      } as unknown as Request;
+
+      jest
+        .spyOn(userService, "findByEmailAndPassword")
+        .mockRejectedValueOnce(new Error(error));
+      jest.spyOn(auth, "generateAccessToken").mockReturnValueOnce("test-token");
+
+      await authController.login(req, res);
+
+      expect(userService.findByEmailAndPassword).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({ error });
+    });
   });
 });

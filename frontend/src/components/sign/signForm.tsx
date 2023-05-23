@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import InputField from "../inputField";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { AlertModal } from "../alertModal";
 import { SignButton } from "./signButton";
@@ -15,30 +15,19 @@ export default function SignForm() {
 	const [errors, setErrors] = useState<unknown[]>([]);
 
 	async function onSubmit(data: any) {
-		if (isSignUp) {
-			const url = "http://localhost:8888/api/auth/signup"
-			axios.post(url, data, {
-				withCredentials: true
-			})
-				.then(res => {
-					// console.log(res);
-					reset();
-					window.alert('Form submitted');
-				}).catch(error => {
-					// console.log(error);
-					const _error = error.response.data.error
-					const isOneError = typeof _error === 'string';
-					if (_error) {
-						setErrors(isOneError ? [_error] : _error)
-						setTimeout(() => {
-							setErrors([]);
-						}, 1600)
-					}
-				})
-		} else {
-			//sign in with auth
-			// const url = "http://localhost:8888/api/user"
-			// axios.get(url, 
+		const url = "http://localhost:8888/api/auth/" + (isSignUp ? "signup" : "signin");
+		try {
+			await axios.post(url, data, { withCredentials: true })
+			reset();
+		} catch (error) {
+			const _error = (error instanceof AxiosError) ? error.response?.data.error : error
+			const isOneError = typeof _error === 'string';
+			if (_error) {
+				setErrors(isOneError ? [_error] : _error)
+				setTimeout(() => {
+					setErrors([]);
+				}, 1600)
+			}
 		}
 	}
 

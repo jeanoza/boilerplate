@@ -89,6 +89,8 @@ describe("UserService", () => {
     });
   });
 
+  describe("findByEmailAndPassword", () => {});
+
   describe("create", () => {
     it("should create and return a user", async () => {
       const body = { ...mockUser1 };
