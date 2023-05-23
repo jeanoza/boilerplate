@@ -7,6 +7,21 @@ import { CreateUserDto } from "../dtos/create-user.dto";
 export class AuthController {
   constructor(private readonly userService: UserService) {}
 
+  async getAccessToken(req: Request, res: Response) {
+    try {
+      const key = "accessToken";
+      const { cookie } = req.headers;
+
+      const accessToken = cookie
+        ?.split("; ")
+        ?.find((el) => el.includes(key))
+        ?.slice(key.length + 1); // to splice after "=" ex:accessToken=...
+      res.json({ accessToken });
+    } catch (error) {
+      res.json({ error });
+    }
+  }
+
   async register(req: Request, res: Response) {
     try {
       const createUserDto: CreateUserDto = req.body;
@@ -42,11 +57,18 @@ export class AuthController {
         email: user.email,
       });
 
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 60 * 60 * 1000, // to config in env
-      });
+      //FIXME: after test delete token2
+      res
+        .cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 60 * 1000, // to config in env
+        })
+        .cookie("accessToken2", accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 60 * 1000, // to config in env
+        });
       res.status(200).json({ success: true });
     } catch (error) {
       res.status(401).json({ error: error.message });

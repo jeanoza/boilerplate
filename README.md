@@ -16,12 +16,22 @@ This repository is a boilerplate to use in future
 
 ## Feature
 
+### Frontend
+
+- [ ] authLayout:
+
+  - [ ] when user doesn't have valid token in cookie => redirect to "/sign-in"
+
+- [ ] signin/signup:
+
+  - [ ] redirect to "/" if user have a accessToken in cookie.
+
 ### Backend
 
-- auth router, service, controller:
+- [x] auth router, service, controller:
 
-- [x] POST "/signin": verify exist user then send a token by cookie
+  - [x] POST "/signin": verify exist user then send a token by cookie
 
-- [ ] POST "/signup": create user then then send a token by cookie
+  - [x] POST "/signup": create user then then send a token by cookie
 
 - add a Mapper(Handler) class like ExceptionHandler in nest or spring to uniformize Error message(ValidationError or etc)

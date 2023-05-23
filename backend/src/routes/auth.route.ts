@@ -12,6 +12,7 @@ const userService = new UserService(userRepository);
 const authController = new AuthController(userService);
 
 //signin(login)
+router.get("/", authController.getAccessToken.bind(authController));
 router.post("/signin", authController.login.bind(authController));
 
 //signup(register)
