@@ -22,6 +22,8 @@ This repository is a boilerplate to use in future
 
   - [ ] when user doesn't have valid token in cookie => redirect to "/sign-in"
 
+  - [ ] authContext: which verify client's auth
+
 - [ ] signin/signup:
 
   - [ ] redirect to "/" if user have a accessToken in cookie.

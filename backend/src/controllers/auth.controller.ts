@@ -58,17 +58,12 @@ export class AuthController {
       });
 
       //FIXME: after test delete token2
-      res
-        .cookie("accessToken", accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 60 * 60 * 1000, // to config in env
-        })
-        .cookie("accessToken2", accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 60 * 60 * 1000, // to config in env
-        });
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000, // to config in env
+      });
+
       res.status(200).json({ success: true });
     } catch (error) {
       res.status(401).json({ error: error.message });
