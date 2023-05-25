@@ -1,12 +1,15 @@
 import Navbar from "./navbar";
 import Footer from "./footer"
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
+export const AuthContext = createContext<string | null>(null);
+
 export default function AuthLayout(props: React.PropsWithChildren) {
-	// const [accessToken, setAccessToken] = useState<string | null>(null);
+	const [accessToken, setAccessToken] = useState<string | null>(null);
 	const navigate = useNavigate();
+
 
 	useEffect(() => {
 		async function getAccessToken() {
@@ -14,9 +17,10 @@ export default function AuthLayout(props: React.PropsWithChildren) {
 				const res = await axios.get("http://localhost:8888/api/auth", {
 					withCredentials: true
 				})
-				if (res.data.accessToken) {
-
-					// localStorage.setItem('accessToken', res.data.accessToken)
+				const { accessToken } = res.data;
+				if (accessToken) {
+					// console.log(accessToken)
+					setAccessToken(accessToken);
 				}
 				else navigate("/sign-in")
 			} catch (error) {
@@ -24,13 +28,13 @@ export default function AuthLayout(props: React.PropsWithChildren) {
 			}
 		}
 		getAccessToken();
-	}, [navigate])
+	}, [])
 
-	return <>
+	return <AuthContext.Provider value={accessToken}>
 		<Navbar />
 		<div className="h-screen relative flex">
 			{props.children}
 			<Footer />
 		</div>
-	</>
+	</AuthContext.Provider>
 }

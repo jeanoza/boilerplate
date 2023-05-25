@@ -1,7 +1,8 @@
-import AuthLayout from "../components/authLayout";
+import { useContext } from "react"
+import { AuthContext } from "../components/authLayout"
 
 export default function About() {
-	return <AuthLayout>
-		<main data-testid="about" className="m-auto">About</main>
-	</AuthLayout>
+	const test = useContext(AuthContext);
+	console.log("about", test);
+	return <main data-testid="about" className="m-auto">About</main>
 }
