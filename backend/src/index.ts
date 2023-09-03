@@ -6,6 +6,9 @@ import { AppDataSource } from "./data-source";
 import userRouter from "./routes/user.route";
 import authRouter from "./routes/auth.route";
 import "reflect-metadata";
+import { User } from "./entities/user.entity";
+
+require('dotenv').config();
 
 AppDataSource.initialize()
   .then(async () => {
@@ -31,13 +34,14 @@ AppDataSource.initialize()
 
     // insert new users for test when no test user
     // const userCount = await AppDataSource.manager.count(User);
-    // if (userCount === 0) {
+    // if (userCount === 0) { 
     //   await AppDataSource.manager.save(
     //     AppDataSource.manager.create(User, {
     //       nickName: "Castor",
     //       firstName: "Timber",
     //       lastName: "Saw",
     //       email: "timber@gmail.com",
+    //       password:"test1"
     //     })
     //   );
 
@@ -47,6 +51,7 @@ AppDataSource.initialize()
     //       firstName: "Phantom",
     //       lastName: "Assassin",
     //       email: "phantom@gmail.com",
+    //       password:"test1"
     //     })
     //   );
     // }

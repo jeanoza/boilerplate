@@ -1,15 +1,18 @@
 import { DataSource } from "typeorm";
 import { User } from "./entities/user.entity";
+import dotenv from "dotenv"
 
-export const AppDataSource = new DataSource({
+dotenv.config();
+
+export const AppDataSource =  new DataSource({
   type: "postgres",
-  host: "postgres",
-  port: 5432,
+  host: process.env.DB_HOST,
+  port: 5432, 
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   synchronize: true,
-  logging: false,
+  logging: true,
   entities: [User],
   // dropSchema: true, // drop all table when restart
   // migrations: [],
