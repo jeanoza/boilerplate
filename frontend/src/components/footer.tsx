@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
 	return <footer data-testid="footer" className="footer items-center p-4 bg-base-200 text-base-content absolute bottom-0 w-full">
@@ -18,5 +18,5 @@ export default function Footer() {
 				</svg>
 			</Link>
 		</div>
-	</footer>
+	</footer>;
 }
