@@ -1,4 +1,4 @@
-import { sign, verify } from "jsonwebtoken";
+import { Secret, sign, verify } from 'jsonwebtoken';
 
 interface Payload {
   id: number;
@@ -6,13 +6,12 @@ interface Payload {
 }
 
 export function generateAccessToken(payload: Payload) {
-  try {
-    return sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-  } catch (error) {
-    throw error;
-  }
+	// try {
+	console.log(process.env.JWT_SECRET);
+	return sign(payload, process.env.JWT_SECRET as Secret, { expiresIn: '1h' });
+	// } catch (error) {
+	// throw error;
+	// }
 }
 
 //TODO: it will be implemented after understand more advantage and usage of refresh token
@@ -24,9 +23,9 @@ export function generateAccessToken(payload: Payload) {
 // }
 
 export function verifyToken(token: string) {
-  try {
-    return verify(token, process.env.JWT_SECRET);
-  } catch (error) {
-    throw error;
-  }
+	// try {
+	return verify(token, process.env.JWT_SECRET as Secret);
+	// } catch (error) {
+	// throw error;
+	// }
 }

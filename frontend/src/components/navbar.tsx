@@ -1,16 +1,16 @@
-import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom"
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export const NAV_ELEMENTS = [
 	{
-		name: "home",
-		path: "/"
+		name: 'home',
+		path: '/'
 	},
 	{
-		name: "about",
-		path: "/about"
+		name: 'about',
+		path: '/about'
 	}
-]
+];
 export default function Navbar() {
 	const location = useLocation();
 
@@ -19,7 +19,7 @@ export default function Navbar() {
 	useEffect(() => {
 		// console.log("render nav")
 
-	}, [location])
+	}, [location]);
 	return <div data-testid="navbar" className="navbar bg-base-100 fixed top-0 left-0 z-10">
 		<div className="navbar-start">
 			<div className="dropdown">
@@ -41,7 +41,7 @@ export default function Navbar() {
 			<Link to="/sign-in" className="btn bg-transparent text-base-content border-transparent hover:border-transparent hover:text-base-300 capitalize">Sign in</Link>
 			<Link to="/sign-up" className="btn btn-outline btn-primary capitalize">Sign up</Link>
 		</div>
-	</div>
+	</div>;
 }
 
 //https://daisyui.com/components/navbar/

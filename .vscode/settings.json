@@ -1,7 +1,10 @@
 {
-	// "eslint.format.enable": true,
+	"eslint.format.enable": true,
 	"eslint.run": "onSave",
 	"editor.formatOnSave": true,
 	"editor.tabSize": 4,
 	"eslint.debug": false,
+	"editor.insertSpaces": false,
+	"editor.indentSize": "tabSize",
+	"editor.detectIndentation": true,
 }

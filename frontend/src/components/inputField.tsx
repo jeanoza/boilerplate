@@ -2,6 +2,7 @@ interface Props {
 	type: string;
 	name: string;
 	placeholder: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	register: any;
 	testid?: string;
 }
@@ -17,5 +18,5 @@ export default function InputField({ register, type, name, placeholder, testid }
 			<span className="w-32">{name}</span>
 			<input {...register(toCamelCase(name))} type={type} placeholder={placeholder} className="input input-bordered" data-testid={testid} />
 		</label>
-	</div>
+	</div>;
 }

@@ -9,19 +9,26 @@ module.exports = {
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
-		'plugin:prettier/recommended',
 	],
-	root: true,
 	env: {
 		node: true,
 		jest: true,
 	},
   	ignorePatterns: ['.eslintrc.js'],
-	'rules': {
+	overrides: [
+	],
+	rules: {
 		'indent': [
-			'warn',
+			'error',
 			'tab',
-			{ 'SwitchCase': 1 }
+			{
+				'SwitchCase': 1,
+				"ignoredNodes": [
+					`FunctionExpression > .params[decorators.length > 0]`,
+					`FunctionExpression > .params > :matches(Decorator, :not(:first-child))`,
+					`ClassBody.body > PropertyDefinition[decorators.length > 0] > .key`,
+				]
+			},
 		],
 		'linebreak-style': [
 			'warn',

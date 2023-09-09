@@ -3,6 +3,7 @@ module.exports = {
 		'browser': true,
 		'es2021': true
 	},
+  	ignorePatterns: ['.eslintrc.js'],
 	'extends': [
 		'eslint:recommended',
 		'plugin:react/recommended',
@@ -22,7 +23,7 @@ module.exports = {
 	],
 	'rules': {
 		'indent': [
-			'warn',
+			'error',
 			'tab',
 			{ 'SwitchCase': 1 }
 		],
