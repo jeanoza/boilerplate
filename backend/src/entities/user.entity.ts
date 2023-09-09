@@ -18,18 +18,20 @@ export class User extends BaseEntity {
 	@IsString()
 	@MinLength(1)
 	@MaxLength(20)
-	@Column()
+	@Column({ name: 'nick_name' })
 	nickName: string;
 
 	@IsNotEmpty()
 	@IsString()
 	@MaxLength(20)
 	@Column()
+	@Column({ name: 'first_name' })
 	firstName: string;
 
 	@IsNotEmpty()
 	@Column()
 	@MaxLength(20)
+	@Column({ name: 'last_name' })
 	lastName: string;
 
 	@IsOptional()
