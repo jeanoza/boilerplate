@@ -8,7 +8,7 @@ describe('AuthController', () => {
 	let authController: AuthController;
 	let userService: UserService;
 	let req: Request;
-	let res: Response<any, Record<string, any>>;
+	let res: Response<unknown, Record<string, unknown>>;
 
 	//env in test
 	const env = process.env;
