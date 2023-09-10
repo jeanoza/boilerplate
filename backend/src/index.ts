@@ -6,13 +6,10 @@ import { AppDataSource } from './data-source';
 import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
 import 'reflect-metadata';
-// import { User } from './entities/user.entity'
 
 
-console.log('HERE');
 AppDataSource.initialize()
 	.then(async() => {
-		console.log('start');
 		// create express app
 		const app = express();
 
