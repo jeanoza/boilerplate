@@ -6,12 +6,7 @@ interface Payload {
 }
 
 export function generateAccessToken(payload: Payload) {
-	// try {
-	console.log(process.env.JWT_SECRET);
 	return sign(payload, process.env.JWT_SECRET as Secret, { expiresIn: '1h' });
-	// } catch (error) {
-	// throw error;
-	// }
 }
 
 //TODO: it will be implemented after understand more advantage and usage of refresh token
@@ -23,9 +18,5 @@ export function generateAccessToken(payload: Payload) {
 // }
 
 export function verifyToken(token: string) {
-	// try {
 	return verify(token, process.env.JWT_SECRET as Secret);
-	// } catch (error) {
-	// throw error;
-	// }
 }
