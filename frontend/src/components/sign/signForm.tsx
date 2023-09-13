@@ -43,7 +43,7 @@ export default function SignForm() {
 		<div className="absolute z-10">
 			{errors.length > 0 &&
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				errors.map((error: any, i) => <AlertModal key={i} alertText={error!} />)
+				errors.map((error: any, i) => <AlertModal key={i} alertText={error} />)
 			}
 		</div>
 		<InputField register={register} type="text" name="Email" placeholder="jean@example.com" testid="commonField" />

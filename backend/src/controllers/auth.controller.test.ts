@@ -58,7 +58,7 @@ describe('AuthController', () => {
 			expect(res.cookie).toHaveBeenCalledWith('accessToken', 'test-token', {
 				httpOnly: true,
 				secure: true,
-				maxAge: process.env.JWT_MAX_AGE,
+				maxAge: Number(process.env.JWT_MAX_AGE),
 			});
 		});
 
@@ -104,7 +104,7 @@ describe('AuthController', () => {
 			expect(res.cookie).toHaveBeenCalledWith('accessToken', 'test-token', {
 				httpOnly: true,
 				secure: true,
-				maxAge: process.env.JWT_MAX_AGE,
+				maxAge: Number(process.env.JWT_MAX_AGE),
 			});
 		});
 		it('should throw error when wrong email or password', async() => {
