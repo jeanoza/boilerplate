@@ -19,6 +19,7 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 				const { accessToken } = res.data;
 				if (accessToken === null) {
 					// console.log(accessToken)
+					console.log(accessToken);
 					setAccessToken(accessToken);
 				} else navigate('/sign-in');
 			} catch (error) {
@@ -29,5 +30,11 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 		getAccessToken();
 	}, []);
 
-	return <AuthContext.Provider value={accessToken}> <Navbar /> <div className="h-screen relative flex"> {props.children} <Footer /></div> </AuthContext.Provider>;
+	return <AuthContext.Provider value={accessToken}>
+		<Navbar />
+		<div className="h-screen relative flex">
+			{props.children}
+			<Footer />
+		</div>
+	</AuthContext.Provider>;
 }

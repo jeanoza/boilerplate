@@ -9,8 +9,8 @@ function handleTest(e: React.MouseEvent): void {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function Home() {
 	const accessToken = useContext(AuthContext);
+	console.log(accessToken);
 
-	console.log('home', accessToken);
 	return <main data-testid="home" className="m-auto"> <button onClick={handleTest}>here</button> Home </main>;
 }
 
