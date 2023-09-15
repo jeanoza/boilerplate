@@ -12,10 +12,8 @@ export class AuthController {
 			const key = 'accessToken';
 			const { cookie } = req.headers;
 
-			const accessToken = cookie
-				?.split('; ')
-				?.find((el) => el.includes(key))
-				?.slice(key.length + 1); // to splice after "=" ex:accessToken=...
+			const accessToken = cookie ?.split('; ') ?.find((el) => el.includes(key)) ?.slice(key.length + 1); // to splice after "=" ex:accessToken=...
+			console.log(accessToken);
 			res.json({ accessToken });
 		} catch (error) {
 			res.json({ error });

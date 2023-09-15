@@ -17,18 +17,19 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 					withCredentials: true
 				});
 				const { accessToken } = res.data;
-				if (accessToken === null) {
-					// console.log(accessToken)
-					console.log(accessToken);
+				if (accessToken !== null) {
 					setAccessToken(accessToken);
+					if (window.location.pathname === '/sign-in' || window.location.pathname === '/sign-up')
+						navigate('/');
 				} else navigate('/sign-in');
 			} catch (error) {
-				console.log(error);
+				console.error('auth failed');
+				// console.error(error);
 			}
 		}
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		getAccessToken();
-	}, []);
+	}, [accessToken, navigate]);
 
 	return <AuthContext.Provider value={accessToken}>
 		<Navbar />
