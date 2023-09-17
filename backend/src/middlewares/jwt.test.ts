@@ -57,7 +57,7 @@ describe('jwt', () => {
 
 			expect(result).toStrictEqual(payload);
 			expect(verifyMock).toHaveBeenCalledTimes(1);
-			expect(verifyMock).toHaveBeenCalledWith(token, process.env.JWT_SECRET);
+			expect(verifyMock).toHaveBeenCalledWith(token, process.env.JWT_SECRET, expect.any(Function));
 		});
 		it('should throw a error if verify failed', () => {
 			verifyMock.mockImplementation(() => {
@@ -66,7 +66,7 @@ describe('jwt', () => {
 
 			expect(() => verifyToken(token)).toThrowError('verify function error');
 			expect(verifyMock).toHaveBeenCalledTimes(1);
-			expect(verifyMock).toHaveBeenCalledWith(token, process.env.JWT_SECRET);
+			expect(verifyMock).toHaveBeenCalledWith(token, process.env.JWT_SECRET, expect.any(Function));
 		});
 	});
 });

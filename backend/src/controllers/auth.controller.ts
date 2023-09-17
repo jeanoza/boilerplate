@@ -3,20 +3,29 @@ import { UserService } from '../services/user.service';
 import { generateAccessToken } from '../middlewares/jwt';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { verifyToken } from '../middlewares/jwt';
 
 export class AuthController {
 	constructor(private readonly userService: UserService) {}
 
-	async getAccessToken(req: Request, res: Response) {
+	getAuth(req: Request, res: Response) {
 		try {
 			const key = 'accessToken';
 			const { cookie } = req.headers;
+			console.log(cookie);
 
-			const accessToken = cookie ?.split('; ') ?.find((el) => el.includes(key)) ?.slice(key.length + 1); // to splice after "=" ex:accessToken=...
-			console.log(accessToken);
-			res.json({ accessToken });
+			// to slice after "=" ex:accessToken=...
+			const accessToken = cookie?.split('; ')?.find((el) => el.includes(key))?.slice(key.length + 1);
+
+			if (accessToken) {
+				const payload = verifyToken(accessToken as string);
+				if (payload) 
+					return res.status(200).json({ auth:true });
+			}
+			res.status(401).json({ error: 'Unauthorized' });
 		} catch (error) {
-			res.json({ error });
+			console.log(error);
+			return res.status(400).json({ error });
 		}
 	}
 

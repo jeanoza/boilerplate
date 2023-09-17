@@ -12,14 +12,10 @@ const userService = new UserService(userRepository);
 const authController = new AuthController(userService);
 
 //signin(login)
-router.get('/', authController.getAccessToken.bind(authController));
+router.get('/', authController.getAuth.bind(authController));
 router.post('/signin', authController.login.bind(authController));
 
 //signup(register)
-router.post(
-	'/signup',
-	validateCreateUser,
-	authController.register.bind(authController)
-);
+router.post('/signup', validateCreateUser, authController.register.bind(authController));
 
 export default router;

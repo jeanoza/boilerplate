@@ -17,6 +17,9 @@ export function generateAccessToken(payload: Payload) {
 //   return token;
 // }
 
-export function verifyToken(token: string) {
-	return verify(token, process.env.JWT_SECRET as Secret);
+export function verifyToken(token: string): Payload | void {
+	return verify(token, process.env.JWT_SECRET as Secret, (err, payload) => {
+		if (err) throw new Error(err.message);
+		return payload;
+	});
 }

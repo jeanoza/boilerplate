@@ -4,10 +4,10 @@ import { useEffect, useState, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export const AuthContext = createContext<string | null>(null);
+export const AuthContext = createContext<boolean | null>(null);
 
 export default function AuthLayout(props: React.PropsWithChildren): JSX.Element {
-	const [accessToken, setAccessToken] = useState<string | null>(null);
+	const [auth, setAuth] = useState<boolean | null>(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -16,22 +16,27 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 				const res = await axios.get('http://localhost:8888/api/auth', {
 					withCredentials: true
 				});
-				const { accessToken } = res.data;
-				if (accessToken !== null) {
-					setAccessToken(accessToken);
-					if (window.location.pathname === '/sign-in' || window.location.pathname === '/sign-up')
+				const { auth } = res.data;
+				if (auth === true) {
+					const { pathname } = window.location;
+					// console.log(pathname);
+					setAuth(auth);
+					if (pathname === '/sign-in' || pathname === '/sign-up')
 						navigate('/');
-				} else navigate('/sign-in');
+				} 
 			} catch (error) {
 				console.error('auth failed');
-				// console.error(error);
+				const { pathname } = window.location;
+				// console.log(pathname);
+				if (pathname !== '/sign-in' && pathname !== '/sign-up')
+					navigate('/sign-in');
 			}
 		}
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		getAccessToken();
-	}, [accessToken, navigate]);
+	}, [auth, window.location.pathname, navigate]);
 
-	return <AuthContext.Provider value={accessToken}>
+	return <AuthContext.Provider value={auth}>
 		<Navbar />
 		<div className="h-screen relative flex">
 			{props.children}

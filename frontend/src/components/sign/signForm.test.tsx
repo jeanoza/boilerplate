@@ -108,10 +108,10 @@ describe('<SignForm/>', () => {
 			expect(signForm).toBeInTheDocument();
 			expect(pathname).toBe('/sign-in');
 		});
-		// it('has 2 common fields(email, password)', () => {
-		// 	const commonFields = screen.getAllByTestId('commonField');
-		// 	expect(commonFields.length).toBe(2);
-		// })
+		it('has 2 common fields(email, password)', () => {
+			const commonFields = screen.getAllByTestId('commonField');
+			expect(commonFields.length).toBe(2);
+		});
 	});
 
 });

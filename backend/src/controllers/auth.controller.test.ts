@@ -91,8 +91,7 @@ describe('AuthController', () => {
 				body: { email: mockUser.email, password: mockUser.password },
 			} as unknown as Request;
 
-			jest
-				.spyOn(userService, 'findByEmailAndPassword')
+			jest.spyOn(userService, 'findByEmailAndPassword')
 				.mockResolvedValueOnce(mockUser);
 			jest.spyOn(auth, 'generateAccessToken').mockReturnValueOnce('test-token');
 
@@ -113,16 +112,27 @@ describe('AuthController', () => {
 				body: { email: mockUser.email, password: mockUser.password },
 			} as unknown as Request;
 
-			jest
-				.spyOn(userService, 'findByEmailAndPassword')
+			jest.spyOn(userService, 'findByEmailAndPassword')
 				.mockRejectedValueOnce(new Error(error));
-			jest.spyOn(auth, 'generateAccessToken').mockReturnValueOnce('test-token');
+			jest.spyOn(auth, 'generateAccessToken')
+				.mockReturnValueOnce('test-token');
 
 			await authController.login(req, res);
 
 			expect(userService.findByEmailAndPassword).toHaveBeenCalledWith(req.body);
 			expect(res.status).toHaveBeenCalledWith(401);
 			expect(res.json).toHaveBeenCalledWith({ error });
+		});
+	});
+
+	describe('getAuth', () => {
+		it('should return a response {auth:boolean} ', async() => {
+			jest.spyOn(auth, 'verifyToken').mockReturnValueOnce({ id:1, email:'test@test-mock.com' });
+
+			authController.getAuth(req, res);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res.json).toEqual({ auth:true });
 		});
 	});
 });

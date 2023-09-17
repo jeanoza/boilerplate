@@ -20,6 +20,7 @@ export default function SignForm() {
 		try {
 			await axios.post(url, data, { withCredentials: true });
 			reset();
+			window.location.href = '/';
 		} catch (error) {
 			const _error = (error instanceof AxiosError) ? error.response?.data.error : error;
 			const isOneError = typeof _error === 'string';
