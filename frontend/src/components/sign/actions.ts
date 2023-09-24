@@ -13,15 +13,12 @@ export interface SignupData extends SigninData {
 }
 
 export async function signup(data: SignupData) {
-	axios.defaults.baseURL = 'http://localhost:8888';
 	return await axios.post('api/auth/signup', data, { withCredentials: true });
 }
 export async function signin(data: SigninData) {
-	axios.defaults.baseURL = 'http://localhost:8888';
 	return await axios.post('api/auth/signin', data, { withCredentials: true });
 }
 
 export async function signout() {
-	axios.defaults.baseURL = 'http://localhost:8888';
 	return await axios.get('api/auth/signout', { withCredentials: true });
 }

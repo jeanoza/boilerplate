@@ -79,6 +79,7 @@ export class AuthController {
 
 	async logout(req: Request, res: Response) {
 		try {
+			res.cookie('accessToken', '', { maxAge: 0 });
 			res.clearCookie('accessToken');
 			res.status(200).json({ success:true });
 		} catch (error) {

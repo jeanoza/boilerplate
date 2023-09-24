@@ -3,9 +3,11 @@ import Home from './routes/home';
 import About from './routes/about';
 import Sign from './routes/sign';
 import AuthLayout from './components/authLayout';
+import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function App() {
+	axios.defaults.baseURL = 'http://localhost:8888';
 	return (
 		<AuthLayout>
 			<Routes>
