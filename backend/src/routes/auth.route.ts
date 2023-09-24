@@ -11,10 +11,13 @@ const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
 const authController = new AuthController(userService);
 
-//signin(login)
+//verifyAuth
 router.get('/', authController.getAuth.bind(authController));
-router.post('/signin', authController.login.bind(authController));
 
+//signout(logout)
+router.get('/signout', authController.logout.bind(authController));
+//signin(login)
+router.post('/signin', authController.login.bind(authController));
 //signup(register)
 router.post('/signup', validateCreateUser, authController.register.bind(authController));
 

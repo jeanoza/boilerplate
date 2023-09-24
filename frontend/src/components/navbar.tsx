@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './authLayout';
+import { signout } from './sign/actions';
 
 export const NAV_ELEMENTS = [
 	{
@@ -12,6 +13,15 @@ export const NAV_ELEMENTS = [
 		path: '/about'
 	}
 ];
+
+async function handleSignout() {
+	try {
+		await signout();
+		window.location.href = '/';
+	} catch (error) {
+		console.error(error);
+	}
+}
 export default function Navbar() {
 	const auth = useContext(AuthContext);
 	return <div data-testid="navbar" className="navbar bg-base-100 fixed top-0 left-0 z-10">
@@ -33,7 +43,7 @@ export default function Navbar() {
 		</div>
 		<div className="navbar-end flex gap-1">
 			{ auth
-				? <Link to='#' className='btn btn-outline btn-primary capitalize'>Sign out</Link>
+				? <Link to='#' className='btn btn-outline btn-primary capitalize' onClick={handleSignout}>Sign out</Link>
 				: <>
 					<Link to="/sign-in" className="btn bg-transparent text-base-content border-transparent hover:border-transparent hover:text-base-300 capitalize">Sign in</Link>
 					<Link to="/sign-up" className="btn btn-outline btn-primary capitalize">Sign up</Link>

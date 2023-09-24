@@ -76,4 +76,13 @@ export class AuthController {
 			res.status(401).json({ error: error.message });
 		}
 	}
+
+	async logout(req: Request, res: Response) {
+		try {
+			res.clearCookie('accessToken');
+			res.status(200).json({ success:true });
+		} catch (error) {
+			res.status(401).json({ error:error.message });
+		}
+	}
 }
