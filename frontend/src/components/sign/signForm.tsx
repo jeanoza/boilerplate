@@ -1,10 +1,11 @@
 import { useLocation } from 'react-router-dom';
 import InputField from '../inputField';
-import { useForm } from 'react-hook-form';
+import { FieldValue, useForm } from 'react-hook-form';
 import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 import { AlertModal } from '../alertModal';
 import { SignButton } from './signButton';
+import { SigninData, SignupData, signin, signup } from './actions';
 
 
 
@@ -15,10 +16,10 @@ export default function SignForm() {
 	const [errors, setErrors] = useState<unknown[]>([]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	async function onSubmit(data: any) {
-		const url = 'http://localhost:8888/api/auth/' + (isSignUp ? 'signup' : 'signin');
+	async function onSubmit(data: FieldValue<SigninData | SignupData>) {
 		try {
-			await axios.post(url, data, { withCredentials: true });
+			if (isSignUp) await signup(data as SignupData);
+			else await signin(data as SigninData);
 			reset();
 			window.location.href = '/';
 		} catch (error) {

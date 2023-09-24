@@ -28,7 +28,11 @@ describe('AuthController', () => {
 			findByEmailAndPassword: jest.fn(),
 		} as unknown as UserService;
 		authController = new AuthController(userService);
-		req = {} as Request;
+		req = {
+			headers:{
+				cookie:'accessToken=test-token'
+			}
+		} as Request;
 		res = {
 			status: jest.fn().mockReturnThis(),
 			json: jest.fn(),
@@ -127,12 +131,17 @@ describe('AuthController', () => {
 
 	describe('getAuth', () => {
 		it('should return a response {auth:boolean} ', async() => {
+			const req = {
+				headers:{
+					cookie:'accessToken=test-token'
+				}
+			} as unknown as Request;
 			jest.spyOn(auth, 'verifyToken').mockReturnValueOnce({ id:1, email:'test@test-mock.com' });
 
 			authController.getAuth(req, res);
 
 			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toEqual({ auth:true });
+			expect(res.json).toHaveBeenCalledWith({ auth:true });
 		});
 	});
 });

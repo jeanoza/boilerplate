@@ -19,7 +19,6 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 				const { auth } = res.data;
 				if (auth === true) {
 					const { pathname } = window.location;
-					// console.log(pathname);
 					setAuth(auth);
 					if (pathname === '/sign-in' || pathname === '/sign-up')
 						navigate('/');
@@ -27,7 +26,6 @@ export default function AuthLayout(props: React.PropsWithChildren): JSX.Element 
 			} catch (error) {
 				console.error('auth failed');
 				const { pathname } = window.location;
-				// console.log(pathname);
 				if (pathname !== '/sign-in' && pathname !== '/sign-up')
 					navigate('/sign-in');
 			}

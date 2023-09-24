@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from './authLayout';
 
 export const NAV_ELEMENTS = [
 	{
@@ -12,14 +13,7 @@ export const NAV_ELEMENTS = [
 	}
 ];
 export default function Navbar() {
-	const location = useLocation();
-
-	// console.log(location);
-
-	useEffect(() => {
-		// console.log("render nav")
-
-	}, [location]);
+	const auth = useContext(AuthContext);
 	return <div data-testid="navbar" className="navbar bg-base-100 fixed top-0 left-0 z-10">
 		<div className="navbar-start">
 			<div className="dropdown">
@@ -38,8 +32,13 @@ export default function Navbar() {
 			</ul>
 		</div>
 		<div className="navbar-end flex gap-1">
-			<Link to="/sign-in" className="btn bg-transparent text-base-content border-transparent hover:border-transparent hover:text-base-300 capitalize">Sign in</Link>
-			<Link to="/sign-up" className="btn btn-outline btn-primary capitalize">Sign up</Link>
+			{ auth
+				? <Link to='#' className='btn btn-outline btn-primary capitalize'>Sign out</Link>
+				: <>
+					<Link to="/sign-in" className="btn bg-transparent text-base-content border-transparent hover:border-transparent hover:text-base-300 capitalize">Sign in</Link>
+					<Link to="/sign-up" className="btn btn-outline btn-primary capitalize">Sign up</Link>
+				</>
+			}
 		</div>
 	</div>;
 }

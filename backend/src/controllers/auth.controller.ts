@@ -12,7 +12,7 @@ export class AuthController {
 		try {
 			const key = 'accessToken';
 			const { cookie } = req.headers;
-			console.log(cookie);
+			// console.log(cookie);
 
 			// to slice after "=" ex:accessToken=...
 			const accessToken = cookie?.split('; ')?.find((el) => el.includes(key))?.slice(key.length + 1);
