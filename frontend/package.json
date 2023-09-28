@@ -65,6 +65,11 @@
     "transformIgnorePatterns": [
       "node_modules/(?!axios)"
     ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "index.tsx",
+      "reportWebVitals.ts"
+    ],
     "collectCoverageFrom": [
       "**/*.(t|j)s(x|)"
     ]
